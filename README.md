@@ -6,13 +6,14 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/rempsyc/lavaanExtra/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rempsyc/lavaanExtra/actions/workflows/R-CMD-check.yaml)
-[![r-universe](https://rempsyc.r-universe.dev/badges/lavaanExtra)](https://rempsyc.r-universe.dev/ui#package:lavaanExtra)
-[![Project Status: Active – The project has reached a stable, usable
-state and is being actively
-developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![r-universe](https://rempsyc.r-universe.dev/badges/lavaanExtra)](https://rempsyc.r-universe.dev/ui/#package:lavaanExtra)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/lavaanExtra)](https://cran.r-project.org/package=lavaanExtra)
 [![Last-commit](https://img.shields.io/github/last-commit/rempsyc/lavaanExtra)](https://github.com/rempsyc/lavaanExtra/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/rempsyc/lavaanExtra/branch/main/graph/badge.svg)](https://app.codecov.io/gh/rempsyc/lavaanExtra?branch=main)
+[![downloads](https://cranlogs.r-pkg.org/badges/lavaanExtra)](https://cran.r-project.org/package=lavaanExtra)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/lavaanExtra)](https://cranlogs.r-pkg.org/)
 [![sponsors](https://img.shields.io/github/sponsors/rempsyc)](https://github.com/sponsors/rempsyc)
 [![followers](https://img.shields.io/github/followers/rempsyc?style=social)](https://github.com/rempsyc?tab=followers)
 [![forks](https://img.shields.io/github/forks/rempsyc/lavaanExtra?style=social)](https://github.com/rempsyc/lavaanExtra/network/members)
@@ -26,13 +27,30 @@ publication and script sharing workflow.
 
 ## Installation
 
-You can install the development version of `lavaanExtra` like so:
+You can install the `lavaanExtra` package directly from CRAN:
+
+``` r
+install.packages("lavaanExtra")
+```
+
+Or the development version from the r-universe (note that there is a
+24-hour delay with GitHub):
 
 ``` r
 install.packages("lavaanExtra", repos = c(
   rempsyc = "https://rempsyc.r-universe.dev",
   CRAN = "https://cloud.r-project.org"))
 ```
+
+Or from GitHub, for the very latest version:
+
+``` r
+# If package `remotes` isn't already installed, install it with `install.packages("remotes")`
+remotes::install_github("rempsyc/lavaanExtra")
+```
+
+You can load the package and open the help file, and click “Index” at
+the bottom. You will see all the available functions listed.
 
 ## Why use `lavaanExtra`?
 
@@ -80,7 +98,7 @@ library(lavaan)
 #> lavaan is FREE software! Please report any bugs.
 library(lavaanExtra)
 #> Suggested citation: Thériault, R. (2022).lavaanExtra: Convenience functions for lavaan 
-#> (R package version 0.1.1) [Computer software]. https://lavaanExtra.remi-theriault.com/
+#> (R package version 0.1.4) [Computer software]. https://lavaanExtra.remi-theriault.com/
 
 # Define latent variables
 latent <- list(visual = paste0("x", 1:3),
@@ -91,7 +109,7 @@ latent <- list(visual = paste0("x", 1:3),
 cfa.model <- write_lavaan(latent = latent)
 cat(cfa.model)
 #> ##################################################
-#> # [---------------Latent variables---------------]
+#> # [-----Latent variables (measurement model)-----]
 #> 
 #> visual =~ x1 + x2 + x3
 #> textual =~ x4 + x5 + x6
@@ -227,8 +245,8 @@ nice_fit(fit.cfa, nice_table = TRUE)
 
 ## SEM example
 
-Note that that latent variables have been defined above, so we can reuse
-them as is, without having to redefine them.
+Note that latent variables have been defined above, so we can reuse them
+as is, without having to redefine them.
 
 ``` r
 # Define our other variables
@@ -249,7 +267,7 @@ model <- write_lavaan(mediation, regression, covariance,
                       indirect, latent, label = TRUE)
 cat(model)
 #> ##################################################
-#> # [---------------Latent variables---------------]
+#> # [-----Latent variables (measurement model)-----]
 #> 
 #> visual =~ x1 + x2 + x3
 #> textual =~ x4 + x5 + x6
@@ -299,7 +317,7 @@ lavaan_cov(fit.sem, nice_table = TRUE)
 
 ``` r
 # Get nice fit indices with the `rempsyc::nice_table` integration
-fit_table <- nice_fit(fit.cfa, fit.sem, nice_table = TRUE)
+fit_table <- nice_fit(list(fit.cfa, fit.sem), nice_table = TRUE)
 fit_table
 ```
 
@@ -307,7 +325,7 @@ fit_table
 
 ``` r
 # Save fit table to Word!
-save_as_docx(fit_table, path = "fit_table.docx")
+flextable::save_as_docx(fit_table, path = "fit_table.docx")
 
 # Let's get the indirect effects only and make it pretty with the `rempsyc::nice_table` integration
 lavaan_ind(fit.sem, nice_table = TRUE)
@@ -321,6 +339,33 @@ nice_lavaanPlot(fit.sem)
 ```
 
 <img src="man/figures/semplot.png" width="70%" />
+
+``` r
+# Alternative way to plot
+mylayout <- data.frame(
+  IV = c("", "x1", "grade", "", "ageyr", "", ""),
+  M = c("", "x2", "", "visual", "", "", ""),
+  DV = c("", "x3", "textual", "", "speed", "", ""),
+  DV.items = c(paste0("x", 4:6), "", paste0("x", 7:9))) |> 
+  as.matrix()
+mylayout
+#>      IV      M        DV        DV.items
+#> [1,] ""      ""       ""        "x4"    
+#> [2,] "x1"    "x2"     "x3"      "x5"    
+#> [3,] "grade" ""       "textual" "x6"    
+#> [4,] ""      "visual" ""        ""      
+#> [5,] "ageyr" ""       "speed"   "x7"    
+#> [6,] ""      ""       ""        "x8"    
+#> [7,] ""      ""       ""        "x9"
+```
+
+``` r
+nice_tidySEM(fit.sem, layout = mylayout, label_location = 0.7)
+
+ggplot2::ggsave("my_semPlot.pdf", width = 6, height = 6, limitsize = FALSE)
+```
+
+<img src="man/figures/semplot2.png" width="70%" />
 
 ## Final note
 

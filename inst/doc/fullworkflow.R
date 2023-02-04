@@ -2,6 +2,7 @@
 # Load library
 library(lavaan)
 library(lavaanExtra)
+library(tibble)
 
 # Define latent variables
 latent <- list(visual = paste0("x", 1:3),
@@ -31,14 +32,17 @@ fit.cfa2 <- cfa_fit_plot(cfa.model, HolzingerSwineford1939,
                          remove.items = paste0("x", c(2:3, 7)))
 
 ## ----cfaplot5-----------------------------------------------------------------
-nice_fit(fit.cfa, fit.cfa2, nice_table = TRUE)
+nice_fit(lst(fit.cfa, fit.cfa2), nice_table = TRUE)
 
 ## ----cfaplot6-----------------------------------------------------------------
 # Save fit table as an object
-fit_table <- nice_fit(fit.cfa, fit.cfa2, nice_table = TRUE)
+fit_table <- nice_fit(lst(fit.cfa, fit.cfa2), nice_table = TRUE)
 
 # Save fit table to Word!
-save_as_docx(fit_table, path = "fit_table.docx")
+flextable::save_as_docx(fit_table, path = "fit_table.docx")
+
+## ---- echo=FALSE--------------------------------------------------------------
+unlink("fit_table.docx")
 
 ## ----saturated----------------------------------------------------------------
 # Calculate scale averages
@@ -156,7 +160,7 @@ lavaan_cov(fit.path)
 lavaan_cov(fit.path, nice_table = TRUE)
 
 # Get nice fit indices with the `rempsyc::nice_table` integration
-nice_fit(fit.cfa, fit.saturated, fit.path, nice_table = TRUE)
+nice_fit(lst(fit.cfa, fit.saturated, fit.path), nice_table = TRUE)
 
 # Let's get the indirect effects only
 lavaan_ind(fit.path)
@@ -176,7 +180,7 @@ labels <- list(ageyr = "Age (year)",
 layout <- list(IV = IV, M = M, DV = DV)
 
 nice_tidySEM(fit.path, layout = layout, label = labels,
-             hide_nonsig_edges = TRUE)
+             hide_nonsig_edges = TRUE, label_location = .60)
 
 
 ## ----latent-------------------------------------------------------------------
@@ -188,6 +192,6 @@ cat(model.latent)
 fit.latent <- sem(model.latent, data = HolzingerSwineford1939)
 
 # Get nice fit indices with the `rempsyc::nice_table` integration
-nice_fit(fit.cfa, fit.saturated, fit.path, fit.latent, nice_table = TRUE)
+nice_fit(lst(fit.cfa, fit.saturated, fit.path, fit.latent), nice_table = TRUE)
 
 
