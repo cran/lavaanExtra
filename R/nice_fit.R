@@ -11,15 +11,17 @@
 #' @param nice_table Logical, whether to print the table as a
 #'                   `rempsyc::nice_table` as well as print the
 #'                   reference values at the bottom of the table.
+#' @param stars Logical, if `nice_table = TRUE`, whether to display
+#'              significance stars (defaults to `FALSE`).
 #' @keywords lavaan structural equation modeling path analysis CFA
 #' @return A dataframe, representing select fit indices (chi2, df, chi2/df,
-#'         p-value of the chi2 test, CFI, TLI, RMSEA, SRMR, AIC, and BIC).
+#'         p-value of the chi2 test, CFI, TLI, RMSEA and its 90% CI, SRMR,
+#'         AIC, and BIC).
 #' @export
-#' @references Schreiber, J. B., Nora, A., Stage, F. K., Barlow, E. A., & King,
-#' J. (2006). Reporting structural equation modeling and confirmatory factor
-#' analysis results: A review. *The Journal of educational research*, *99*(6),
-#' 323-338. https://doi.org/10.3200/JOER.99.6.323-338
-#' @examples
+#' @references Schreiber, J. B. (2017). Update to core reporting practices in
+#' structural equation modeling. *Research in social and administrative pharmacy*,
+#' *13*(3), 634-643. https://doi.org/10.1016/j.sapharm.2016.06.006
+#' @examplesIf requireNamespace("lavaan", quietly = TRUE)
 #' (latent <- list(
 #'   visual = paste0("x", 1:3),
 #'   textual = paste0("x", 4:6),
@@ -38,12 +40,17 @@
 #' fit <- sem(HS.model, data = HolzingerSwineford1939)
 #' nice_fit(fit)
 #'
-nice_fit <- function(model, model.labels, nice_table = FALSE) {
-  if (inherits(model, "list")) {
+nice_fit <- function(model, model.labels, nice_table = FALSE, stars = FALSE) {
+
+  if (inherits(model, "list") && all(unlist(lapply(model, inherits, "lavaan")))) {
     models.list <- model
-  } else {
+  } else if (inherits(model, "lavaan")) {
     models.list <- list(model)
+  } else {
+    stop(paste("Model must be of class 'lavaan' or be a 'list()' of lavaan models (using 'c()' won't work).\n",
+               "Have you perhaps provided the model specification (of class character) instead of the sem or cfa object?"))
   }
+
   x <- lapply(models.list, nice_fit_internal)
   df <- do.call(rbind, x)
   if (!missing(model.labels)) {
@@ -62,8 +69,16 @@ nice_fit <- function(model, model.labels, nice_table = FALSE) {
   df <- cbind(Model, df)
   row.names(df) <- NULL
   if (nice_table) {
-    rlang::check_installed("rempsyc", reason = "for this feature.")
-    table <- rempsyc::nice_table(df)
+    insight::check_if_installed("rempsyc", reason = "for this feature.")
+    x <- df
+
+    x[c("rmsea", "rmsea.ci.lower", "rmsea.ci.upper")] <- rempsyc::format_r(as.numeric(
+      unlist(x[, c("rmsea", "rmsea.ci.lower", "rmsea.ci.upper")])))
+    x$`RMSEA [90% CI]` <- paste0(x$rmsea, " [", x$rmsea.ci.lower, ", ", x$rmsea.ci.upper, "]")
+    x <- x[!names(x) %in% c("rmsea", "rmsea.ci.lower", "rmsea.ci.upper")]
+    x <- x[c(1:7, 11, 8:10)]
+
+    table <- rempsyc::nice_table(x, stars = stars)
     table <- flextable::add_footer_row(table,
       values = c(
         Model = "Ideal Value",
@@ -73,10 +88,10 @@ nice_fit <- function(model, model.labels, nice_table = FALSE) {
         p = "> .05",
         CFI = "\u2265 .95",
         TLI = "\u2265 .95",
-        RMSEA = "< .06-.08",
+        `RMSEA (90% CI)` = "< .05 [.00, .08]",
         SRMR = "\u2264 .08",
-        AIC = "Smaller is better",
-        BIC = "Smaller is better"
+        AIC = "Smaller",
+        BIC = "Smaller"
       ),
       colwidths = rep(1, length(table$col_keys))
     )
@@ -84,7 +99,8 @@ nice_fit <- function(model, model.labels, nice_table = FALSE) {
     table <- flextable::align(table, align = "center", part = "all")
 
     table <- flextable::footnote(table, i = 1, j = 1, value = flextable::as_paragraph(
-      "As proposed by Schreiber et al. (2006)."), ref_symbols = "a", part = "footer")
+      "As proposed by Schreiber (2017)."), ref_symbols = "a", part = "footer")
+    table <- flextable::bold(table, i = 2, bold = FALSE, part = "footer")
     table <- flextable::align(table, i = 2, part = "footer", align = "left")
 
     table <- flextable::font(table, part = "all", fontname = "Times New Roman")
@@ -100,14 +116,20 @@ nice_fit <- function(model, model.labels, nice_table = FALSE) {
 }
 
 nice_fit_internal <- function(fit) {
-  x <- lavaan::fitMeasures(fit, c(
-    "chisq", "df", "pvalue", "cfi", "tli",
-    "rmsea", "srmr", "aic", "bic"
-  ))
+
+  x <- lavaan::fitMeasures(fit)
   x <- as.data.frame(t(as.data.frame(x)))
+  # cfi.list <- c(x["cfi.robust"], x["cfi.scaled"], x["cfi"])
+  # x$cfi <- cfi.list[[which(!is.na(cfi.list))[1]]]
+  keep <- c(
+    "chisq", "df", "pvalue", "cfi", "tli",
+    "rmsea", "rmsea.ci.lower", "rmsea.ci.upper",
+    "srmr", "aic", "bic"
+  )
+  x <- x[keep]
   chi2.df <- x$chisq / x$df
-  x <- cbind(x[1:2], chi2.df, x[3:9])
+  x <- cbind(x[1:2], chi2.df, x[3:length(x)])
   x <- round(x, 3)
-  names(x)[(c(1, 4:10))] <- c("chi2", "p", toupper(names(x)[5:10]))
   x
+
 }

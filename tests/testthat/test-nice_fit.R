@@ -1,3 +1,5 @@
+suppressWarnings(library(lavaan))
+
 latent <- list(
   visual = paste0("x", 1:3),
   textual = paste0("x", 4:6),
@@ -11,7 +13,6 @@ regression <- list(
 
 HS.model <- write_lavaan(latent = latent, regression = regression)
 
-library(lavaan)
 fit <- sem(HS.model, data = HolzingerSwineford1939)
 
 
@@ -27,6 +28,7 @@ test_that("nice_fit regular", {
 })
 
 test_that("nice_fit as nice_table", {
+  skip_if_not_installed("rempsyc")
   expect_s3_class(
     nice_fit(fit, nice_table = TRUE),
     c("nice_table", "flextable")
@@ -62,6 +64,12 @@ test_that("nice_fit warns on labels", {
   # Testing more labels
   expect_error(
     nice_fit(fit, fit, model.labels = seq(1,10))
+  )
+})
+
+test_that("nice_fit error on wronb object class", {
+  expect_error(
+    nice_fit(HS.model, model.labels = seq(1,10))
   )
 })
 

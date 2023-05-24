@@ -4,10 +4,14 @@
 \alias{lavaan_cov}
 \title{Extract relevant covariance indices from lavaan model}
 \usage{
-lavaan_cov(fit, nice_table = FALSE, ...)
+lavaan_cov(fit, estimate = "B", nice_table = FALSE, ...)
 }
 \arguments{
 \item{fit}{lavaan fit object to extract covariance indices from}
+
+\item{estimate}{What estimate to use, either the standardized
+estimate ("B", default), or unstandardized
+estimate ("b").}
 
 \item{nice_table}{Logical, whether to print the table as a
 \code{rempsyc::nice_table} as well as print the
@@ -22,11 +26,11 @@ the covariance, and corresponding p-value.
 \description{
 Extract relevant covariance indices from lavaan model through
 \code{lavaan::parameterEstimates} with \code{standardized = TRUE}. In this
-case, the correlation coefficient (r) represents the resulting
+case, the covariances represent the resulting
 \code{std.all} column.
 }
 \examples{
-
+\dontshow{if (requireNamespace("lavaan", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 (latent <- list(visual = paste0("x", 1:3),
                 textual = paste0("x", 4:6),
                 speed = paste0("x", 7:9)))
@@ -41,10 +45,9 @@ HS.model <- write_lavaan(regression = regression, covariance = covariance,
 cat(HS.model)
 
 library(lavaan)
-fit <- lavaan(HS.model, data=HolzingerSwineford1939,
-              auto.var=TRUE, auto.fix.first=TRUE,
-              auto.cov.lv.x=TRUE)
+fit <- sem(HS.model, data=HolzingerSwineford1939)
 lavaan_cov(fit)
+\dontshow{\}) # examplesIf}
 }
 \keyword{CFA}
 \keyword{analysis}

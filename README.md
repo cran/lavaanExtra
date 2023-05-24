@@ -6,17 +6,17 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/rempsyc/lavaanExtra/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rempsyc/lavaanExtra/actions/workflows/R-CMD-check.yaml)
-[![r-universe](https://rempsyc.r-universe.dev/badges/lavaanExtra)](https://rempsyc.r-universe.dev/ui/#package:lavaanExtra)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/lavaanExtra)](https://cran.r-project.org/package=lavaanExtra)
+[![r-universe](https://rempsyc.r-universe.dev/badges/lavaanExtra)](https://rempsyc.r-universe.dev/ui/#package:lavaanExtra)
 [![Last-commit](https://img.shields.io/github/last-commit/rempsyc/lavaanExtra)](https://github.com/rempsyc/lavaanExtra/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/rempsyc/lavaanExtra/branch/main/graph/badge.svg)](https://app.codecov.io/gh/rempsyc/lavaanExtra?branch=main)
+[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![downloads](https://cranlogs.r-pkg.org/badges/lavaanExtra)](https://cran.r-project.org/package=lavaanExtra)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/lavaanExtra)](https://cranlogs.r-pkg.org/)
 [![sponsors](https://img.shields.io/github/sponsors/rempsyc)](https://github.com/sponsors/rempsyc)
 [![followers](https://img.shields.io/github/followers/rempsyc?style=social)](https://github.com/rempsyc?tab=followers)
-[![forks](https://img.shields.io/github/forks/rempsyc/lavaanExtra?style=social)](https://github.com/rempsyc/lavaanExtra/network/members)
 [![stars](https://img.shields.io/github/stars/rempsyc/lavaanExtra?style=social)](https://github.com/rempsyc/lavaanExtra/stargazers)
 <!-- badges: end -->
 
@@ -92,15 +92,16 @@ the bottom. You will see all the available functions listed.
 ## CFA example
 
 ``` r
-# Load library
+# Load libraries
 library(lavaan)
-#> This is lavaan 0.6-12
-#> lavaan is FREE software! Please report any bugs.
 library(lavaanExtra)
-#> Suggested citation: Thériault, R. (2022).lavaanExtra: Convenience functions for lavaan 
-#> (R package version 0.1.4) [Computer software]. https://lavaanExtra.remi-theriault.com/
 
 # Define latent variables
+latent <- list(visual = c("x1", "x2", "x3"),
+               textual = c("x4", "x5", "x6"),
+               speed = c("x7", "x8", "x9"))
+
+# If you have many items, you can also use:
 latent <- list(visual = paste0("x", 1:3),
                textual = paste0("x", 4:6),
                speed = paste0("x", 7:9))
@@ -118,7 +119,7 @@ cat(cfa.model)
 # Fit the model fit and plot with `lavaanExtra::cfa_fit_plot`
 # to get the factor loadings visually (optionally as PDF)
 fit.cfa <- cfa_fit_plot(cfa.model, HolzingerSwineford1939)
-#> lavaan 0.6-12 ended normally after 35 iterations
+#> lavaan 0.6.15 ended normally after 35 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -127,7 +128,7 @@ fit.cfa <- cfa_fit_plot(cfa.model, HolzingerSwineford1939)
 #>   Number of observations                           301
 #> 
 #> Model Test User Model:
-#>                                               Standard      Robust
+#>                                               Standard      Scaled
 #>   Test Statistic                                85.306      87.132
 #>   Degrees of freedom                                24          24
 #>   P-value (Chi-square)                           0.000       0.000
@@ -160,18 +161,21 @@ fit.cfa <- cfa_fit_plot(cfa.model, HolzingerSwineford1939)
 #>                                                                   
 #>   Akaike (AIC)                                7517.490    7517.490
 #>   Bayesian (BIC)                              7595.339    7595.339
-#>   Sample-size adjusted Bayesian (BIC)         7528.739    7528.739
+#>   Sample-size adjusted Bayesian (SABIC)       7528.739    7528.739
 #> 
 #> Root Mean Square Error of Approximation:
 #> 
 #>   RMSEA                                          0.092       0.093
 #>   90 Percent confidence interval - lower         0.071       0.073
 #>   90 Percent confidence interval - upper         0.114       0.115
-#>   P-value RMSEA <= 0.05                          0.001       0.001
+#>   P-value H_0: RMSEA <= 0.050                    0.001       0.001
+#>   P-value H_0: RMSEA >= 0.080                    0.840       0.862
 #>                                                                   
 #>   Robust RMSEA                                               0.092
 #>   90 Percent confidence interval - lower                     0.072
 #>   90 Percent confidence interval - upper                     0.114
+#>   P-value H_0: Robust RMSEA <= 0.050                         0.001
+#>   P-value H_0: Robust RMSEA >= 0.080                         0.849
 #> 
 #> Standardized Root Mean Square Residual:
 #> 
@@ -241,7 +245,7 @@ fit.cfa <- cfa_fit_plot(cfa.model, HolzingerSwineford1939)
 nice_fit(fit.cfa, nice_table = TRUE)
 ```
 
-<img src="man/figures/README-cfa2-1.png" width="90%" />
+<img src="man/figures/README-cfa2-1.png" width="100%" />
 
 ## SEM example
 
@@ -301,19 +305,21 @@ cat(model)
 #> grade_visual_textual := grade_visual * visual_textual
 
 fit.sem <- sem(model, data = HolzingerSwineford1939)
+```
 
+``` r
 # Get regression parameters only and make it pretty with the `rempsyc::nice_table` integration
 lavaan_reg(fit.sem, nice_table = TRUE, highlight = TRUE)
 ```
 
-<img src="man/figures/README-saturated-1.png" width="30%" />
+<img src="man/figures/README-saturated-1.png" width="60%" />
 
 ``` r
-# Get covariance indices and make it pretty with the `rempsyc::nice_table` integration
-lavaan_cov(fit.sem, nice_table = TRUE)
+# Get correlations and make them pretty with the `rempsyc::nice_table` integration
+lavaan_cor(fit.sem, nice_table = TRUE)
 ```
 
-<img src="man/figures/README-covariance-1.png" width="30%" />
+<img src="man/figures/README-covariance-1.png" width="40%" />
 
 ``` r
 # Get nice fit indices with the `rempsyc::nice_table` integration
@@ -321,7 +327,7 @@ fit_table <- nice_fit(list(fit.cfa, fit.sem), nice_table = TRUE)
 fit_table
 ```
 
-<img src="man/figures/README-path2-1.png" width="90%" />
+<img src="man/figures/README-path2-1.png" width="100%" />
 
 ``` r
 # Save fit table to Word!
@@ -331,7 +337,7 @@ flextable::save_as_docx(fit_table, path = "fit_table.docx")
 lavaan_ind(fit.sem, nice_table = TRUE)
 ```
 
-<img src="man/figures/README-indirect2-1.png" width="50%" />
+<img src="man/figures/README-indirect2-1.png" width="90%" />
 
 ``` r
 # Plot our model
@@ -374,7 +380,7 @@ feature request is appreciated, and the package will likely change and
 evolve over time based on community feedback. Feel free to open an issue
 or discussion to share your questions or concerns. And of course, please
 have a look at the other tutorials to discover even more cool features:
-<https://lavaanextra.remi-theriault.com/articles/>
+<https://lavaanExtra.remi-theriault.com/articles/>
 
 ## Support me and this package
 

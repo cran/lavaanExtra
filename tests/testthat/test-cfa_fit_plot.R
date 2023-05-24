@@ -1,3 +1,5 @@
+suppressWarnings(library(lavaan))
+
 .old_wd <- setwd(tempdir())
 
 (latent <- list(visual = paste0("x", 1:3),
@@ -6,10 +8,8 @@
 
 model <- write_lavaan(latent = latent)
 
-library(lavaan)
 data <- HolzingerSwineford1939
 estimator <- "MLR"
-fit1 <- cfa_fit_plot(model, data)
 fit2 <- cfa(model, data, estimator = estimator)
 
 (latent2 <- list(visual = paste0("x", 2:3),
@@ -22,6 +22,8 @@ fit2 <- cfa(model, data, estimator = estimator)
 
 
 test_that("cfa_fit_plot comparison to cfa", {
+  skip_if_not_installed("lavaanPlot")
+  fit1 <- cfa_fit_plot(model, data)
   expect_equal(
     summary(fit1),
     summary(fit2)
@@ -30,6 +32,7 @@ test_that("cfa_fit_plot comparison to cfa", {
 
 test_that("cfa_fit_plot save as PDF", {
   skip_on_cran()
+  skip_if_not_installed("lavaanPlot")
   fit3 <- cfa_fit_plot(model, data, save.as.pdf = TRUE, file.name = "cfaplot")
   expect_equal(
     summary(fit3),
@@ -37,11 +40,12 @@ test_that("cfa_fit_plot save as PDF", {
   )
 })
 
-fit4 <- cfa_fit_plot(model, data, print = FALSE, remove.items = c("x1"))
 model <- write_lavaan(latent = latent2)
 fit5 <- cfa(model, data, estimator = estimator)
 
 test_that("cfa_fit_plot remove items", {
+  skip_if_not_installed("lavaanPlot")
+  fit4 <- cfa_fit_plot(model, data, print = FALSE, remove.items = c("x1"))
   expect_equal(
     summary(fit4),
     summary(fit5)

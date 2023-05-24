@@ -7,13 +7,13 @@
 nice_lavaanPlot(
   model,
   node_options = list(shape = "box", fontname = "Helvetica"),
-  edge_options = list(color = "grey"),
+  edge_options = c(color = "black"),
   coefs = TRUE,
   stand = TRUE,
   covs = FALSE,
-  stars = list("regress"),
+  stars = c("regress", "latent", "covs"),
   sig = 0.05,
-  graph_options = list(rankdir = "LR"),
+  graph_options = c(rankdir = "LR"),
   ...
 )
 }
@@ -24,13 +24,15 @@ nice_lavaanPlot(
 
 \item{edge_options}{Colour of edges.}
 
-\item{coefs}{Logical, whether to plot coefficients.}
+\item{coefs}{Logical, whether to plot coefficients. Defaults to TRUE.}
 
-\item{stand}{Logical, whether to standardized coefficients.}
+\item{stand}{Logical, whether to use standardized coefficients.
+Defaults to TRUE.}
 
-\item{covs}{Logical, whether to plot covariances}
+\item{covs}{Logical, whether to plot covariances. Defaults to FALSE.}
 
-\item{stars}{Logical, whether to plot significance stars.}
+\item{stars}{Which links to plot significance stars for. One of
+\code{c("regress", "latent", "covs")}.}
 
 \item{sig}{Significance threshold.}
 
@@ -52,6 +54,7 @@ Make a quick and decent-looking \code{lavaanPlot}.
 }
 
 \examples{
+\dontshow{if (requireNamespace("lavaan", quietly = TRUE) && requireNamespace("lavaanPlot", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 (latent <- list(visual = paste0("x", 1:3),
                 textual = paste0("x", 4:6),
                 speed = paste0("x", 7:9)))
@@ -62,6 +65,7 @@ cat(HS.model)
 library(lavaan)
 fit <- cfa(HS.model, HolzingerSwineford1939)
 nice_lavaanPlot(fit)
+\dontshow{\}) # examplesIf}
 }
 \keyword{CFA}
 \keyword{fit}

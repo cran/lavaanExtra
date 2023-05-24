@@ -18,7 +18,7 @@ fit <- sem(HS.model, data = HolzingerSwineford1939)
 
 test_that("nice_fit regular", {
   expect_s3_class(
-    lavaan_reg(fit),
+    lavaan_cor(fit),
     c("lavaan.data.frame", "data.frame")
   )
 })
@@ -26,21 +26,7 @@ test_that("nice_fit regular", {
 test_that("nice_fit as nice_table", {
   skip_if_not_installed("rempsyc")
   expect_s3_class(
-    lavaan_reg(fit, nice_table = TRUE),
+    lavaan_cor(fit, nice_table = TRUE),
     c("nice_table", "flextable")
-  )
-})
-
-test_that("nice_fit estimates", {
-  expect_s3_class(
-    lavaan_reg(fit, estimate = "b"),
-    c("lavaan.data.frame", "data.frame")
-  )
-  expect_s3_class(
-    lavaan_reg(fit, estimate = "B"),
-    c("lavaan.data.frame", "data.frame")
-  )
-  expect_error(
-    lavaan_reg(fit, estimate = "C"),
   )
 })

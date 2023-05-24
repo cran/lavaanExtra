@@ -9,10 +9,12 @@ nice_tidySEM(
   layout = NULL,
   hide_nonsig_edges = FALSE,
   hide_var = TRUE,
+  hide_cov = FALSE,
   hide_mean = TRUE,
   est_std = TRUE,
   label,
   label_location = NULL,
+  reduce_items = NULL,
   plot = TRUE,
   ...
 )
@@ -31,6 +33,8 @@ Defaults to FALSE.}
 
 \item{hide_var}{Logical, hides variances. Defaults to TRUE.}
 
+\item{hide_cov}{Logical, hides co-variances. Defaults to FALSE.}
+
 \item{hide_mean}{Logical, hides means/node labels. Defaults to TRUE.}
 
 \item{est_std}{Logical, whether to use the standardized coefficients.
@@ -42,6 +46,14 @@ format \code{(colname = "label")}.}
 
 \item{label_location}{Location of label along the path, as a percentage
 (defaults to middle, 0.5).}
+
+\item{reduce_items}{A numeric vector of length 1 (x) or 2 (x & y) defining
+how much space to trim from the nodes (boxes) of the
+items defining the latent variables. Can be provided
+either as \code{reduce_items = 0.4} (will only affect
+horizontal space, x), or
+\code{reduce_items = c(x = 0.4, y = 0.2)} (will affect
+both horizontal x and vertical y).}
 
 \item{plot}{Logical, whether to plot the result (default). If \code{FALSE},
 returns the \code{tidy_sem} object, which can be further edited
@@ -63,7 +75,7 @@ Make a quick and decent-looking \code{tidySEM} plot.
 }
 
 \examples{
-
+\dontshow{if (requireNamespace("lavaan", quietly = TRUE) && requireNamespace("tidySEM", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Calculate scale averages
 library(lavaan)
 data <- HolzingerSwineford1939
@@ -93,6 +105,7 @@ fit <- sem(model, data)
 \donttest{
 nice_tidySEM(fit, layout = structure)
 }
+\dontshow{\}) # examplesIf}
 }
 \keyword{CFA}
 \keyword{fit}
