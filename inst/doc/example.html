@@ -360,47 +360,54 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <code>lavaan</code> models. We start with the source itself: The lavaan
 project at <a href="https://lavaan.ugent.be" class="uri">https://lavaan.ugent.be</a>. Let’s start by loading both
 packages.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lavaan)</span></code></pre></div>
-<pre><code>## Warning: package &#39;lavaan&#39; was built under R version 4.2.3</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lavaanExtra)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(lavaan)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(lavaanExtra)</span></code></pre></div>
 <div id="example-1-model-syntax-1" class="section level2">
 <h2>Example 1 (Model syntax 1):</h2>
 <p>Source: <a href="https://lavaan.ugent.be/tutorial/syntax1.html" class="uri">https://lavaan.ugent.be/tutorial/syntax1.html</a></p>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>myModel <span class="ot">&lt;-</span> <span class="st">&#39; # regressions</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="st">             y1 + y2 ~ f1 + f2 + x1 + x2</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">                  f1 ~ f2 + f3</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="st">                  f2 ~ f3 + x1 + x2</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">             # latent variable definitions </span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">               f1 =~ y1 + y2 + y3 </span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">               f2 =~ y4 + y5 + y6 </span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">               f3 =~ y7 + y8 + y9 + y10</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="st">             # variances and covariances </span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="st">               y1 ~~ y1 </span></span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="st">               y1 ~~ y2 </span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="st">               f1 ~~ f2</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="st">             # intercepts </span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="st">               y1 ~ 1 </span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="st">               f1 ~ 1</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="st">           &#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>myModel <span class="ot">&lt;-</span> <span class="st">&quot; # regressions</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="st">             y1 + y2 ~ f1 + f2 + x1 + x2</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="st">                  f1 ~ f2 + f3</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="st">                  f2 ~ f3 + x1 + x2</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="st">             # latent variable definitions</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="st">               f1 =~ y1 + y2 + y3</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="st">               f2 =~ y4 + y5 + y6</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="st">               f3 =~ y7 + y8 + y9 + y10</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="st">             # variances and covariances</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="st">               y1 ~~ y1</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="st">               y1 ~~ y2</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="st">               f1 ~~ f2</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="st">             # intercepts</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="st">               y1 ~ 1</span></span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a><span class="st">               f1 ~ 1</span></span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a><span class="st">           &quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y1 =</span> <span class="fu">c</span>(<span class="st">&quot;f1&quot;</span>, <span class="st">&quot;f2&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>),</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">y2 =</span> <span class="fu">c</span>(<span class="st">&quot;f1&quot;</span>, <span class="st">&quot;f2&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>),</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">f1 =</span> <span class="fu">c</span>(<span class="st">&quot;f2&quot;</span>, <span class="st">&quot;f3&quot;</span>),</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">f2 =</span> <span class="fu">c</span>(<span class="st">&quot;f3&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>))</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">f1 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">f2 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>), </span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">f3 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">10</span>))</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y1 =</span> <span class="st">&quot;y1&quot;</span>,</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">y1 =</span> <span class="st">&quot;y2&quot;</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">f1 =</span> <span class="st">&quot;f2&quot;</span>)</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>int <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;y1&quot;</span>, <span class="st">&quot;f1&quot;</span>)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>myModel <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">regression =</span> reg, <span class="at">latent =</span> lat, <span class="at">covariance =</span> cov,</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                        <span class="at">intercept =</span> int)</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(myModel)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>  <span class="at">y1 =</span> <span class="fu">c</span>(<span class="st">&quot;f1&quot;</span>, <span class="st">&quot;f2&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>),</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="at">y2 =</span> <span class="fu">c</span>(<span class="st">&quot;f1&quot;</span>, <span class="st">&quot;f2&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>  <span class="at">f1 =</span> <span class="fu">c</span>(<span class="st">&quot;f2&quot;</span>, <span class="st">&quot;f3&quot;</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="at">f2 =</span> <span class="fu">c</span>(<span class="st">&quot;f3&quot;</span>, <span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="at">f1 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="at">f2 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="at">f3 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">10</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="at">y1 =</span> <span class="st">&quot;y1&quot;</span>,</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="at">y1 =</span> <span class="st">&quot;y2&quot;</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="at">f1 =</span> <span class="st">&quot;f2&quot;</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>)</span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>int <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;y1&quot;</span>, <span class="st">&quot;f1&quot;</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>myModel <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  <span class="at">regression =</span> reg, <span class="at">latent =</span> lat, <span class="at">covariance =</span> cov,</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="at">intercept =</span> int</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>)</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="fu">cat</span>(myModel)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -433,15 +440,17 @@ packages.</p>
 <h2>Example 2 (A CFA example):</h2>
 <p>Source: <a href="https://lavaan.ugent.be/tutorial/cfa.html" class="uri">https://lavaan.ugent.be/tutorial/cfa.html</a></p>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>HS.model <span class="ot">&lt;-</span> <span class="st">&#39; visual  =~ x1 + x2 + x3 </span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">              textual =~ x4 + x5 + x6</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">              speed   =~ x7 + x8 + x9 &#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>HS.model <span class="ot">&lt;-</span> <span class="st">&quot; visual  =~ x1 + x2 + x3</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="st">              textual =~ x4 + x5 + x6</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="st">              speed   =~ x7 + x8 + x9 &quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">visual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">speed =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>))</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>myModel <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(myModel)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>  <span class="at">visual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>  <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>  <span class="at">speed =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>)</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>myModel <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">cat</span>(myModel)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -453,34 +462,40 @@ packages.</p>
 <h2>Example 3 (A SEM example):</h2>
 <p>Source: <a href="https://lavaan.ugent.be/tutorial/sem.html" class="uri">https://lavaan.ugent.be/tutorial/sem.html</a></p>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="st">  # measurement model</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="st">    ind60 =~ x1 + x2 + x3</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="st">    dem60 =~ y1 + y2 + y3 + y4</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="st">    dem65 =~ y5 + y6 + y7 + y8</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="st">  # regressions</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="st">    dem60 ~ ind60</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="st">    dem65 ~ ind60 + dem60</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="st">  # residual correlations</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="st">    y1 ~~ y5</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="st">    y2 ~~ y4 + y6</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="st">    y3 ~~ y7</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="st">    y4 ~~ y8</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="st">    y6 ~~ y8</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="st">  # measurement model</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="st">    ind60 =~ x1 + x2 + x3</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="st">    dem60 =~ y1 + y2 + y3 + y4</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="st">    dem65 =~ y5 + y6 + y7 + y8</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="st">  # regressions</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="st">    dem60 ~ ind60</span></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="st">    dem65 ~ ind60 + dem60</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="st">  # residual correlations</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="st">    y1 ~~ y5</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="st">    y2 ~~ y4 + y6</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="st">    y3 ~~ y7</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="st">    y4 ~~ y8</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a><span class="st">    y6 ~~ y8</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">ind60 =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">dem60 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>),</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">dem65 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>))</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">dem60 =</span> <span class="st">&quot;ind60&quot;</span>,</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">dem65 =</span> <span class="fu">c</span>(<span class="st">&quot;ind60&quot;</span>, <span class="st">&quot;dem60&quot;</span>))</span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y1 =</span> <span class="st">&quot;y5&quot;</span>,</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">y2 =</span> <span class="fu">c</span>(<span class="st">&quot;y4&quot;</span>, <span class="st">&quot;y6&quot;</span>),</span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">y3 =</span> <span class="st">&quot;y7&quot;</span>,</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>            <span class="at">y4 =</span> <span class="st">&quot;y8&quot;</span>,</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">y6 =</span> <span class="st">&quot;y8&quot;</span>)</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat, <span class="at">regression =</span> reg, <span class="at">covariance =</span> cov)</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="at">ind60 =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="at">dem60 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="at">dem65 =</span> <span class="fu">paste0</span>(<span class="st">&quot;y&quot;</span>, <span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="at">dem60 =</span> <span class="st">&quot;ind60&quot;</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="at">dem65 =</span> <span class="fu">c</span>(<span class="st">&quot;ind60&quot;</span>, <span class="st">&quot;dem60&quot;</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  <span class="at">y1 =</span> <span class="st">&quot;y5&quot;</span>,</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  <span class="at">y2 =</span> <span class="fu">c</span>(<span class="st">&quot;y4&quot;</span>, <span class="st">&quot;y6&quot;</span>),</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  <span class="at">y3 =</span> <span class="st">&quot;y7&quot;</span>,</span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="at">y4 =</span> <span class="st">&quot;y8&quot;</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  <span class="at">y6 =</span> <span class="st">&quot;y8&quot;</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>)</span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat, <span class="at">regression =</span> reg, <span class="at">covariance =</span> cov)</span>
+<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -509,26 +524,30 @@ packages.</p>
 <div id="example-4.1" class="section level4">
 <h4>Example 4.1</h4>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="st"># three-factor model</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="st">  visual =~ x1 + x2 + x3</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="st">  textual =~ x4 + x5 + x6</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="st">  speed   =~ NA*x7 + x8 + x9</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="st"># orthogonal factors</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="st">  visual ~~ 0*speed</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="st">  textual ~~ 0*speed</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="st"># fix variance of speed factor</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="st">  speed ~~ 1*speed</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="st"># three-factor model</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="st">  visual =~ x1 + x2 + x3</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="st">  textual =~ x4 + x5 + x6</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="st">  speed   =~ NA*x7 + x8 + x9</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="st"># orthogonal factors</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="st">  visual ~~ 0*speed</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="st">  textual ~~ 0*speed</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="st"># fix variance of speed factor</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="st">  speed ~~ 1*speed</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">visual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">speed =</span> <span class="fu">c</span>(<span class="st">&quot;NA*x7&quot;</span>, <span class="st">&quot;x8&quot;</span>, <span class="st">&quot;x9&quot;</span>))</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">visual =</span> <span class="st">&quot;0*speed&quot;</span>,</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">textual =</span> <span class="st">&quot;0*speed&quot;</span>,</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">speed =</span> <span class="st">&quot;1*speed&quot;</span>)</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat, <span class="at">covariance =</span> cov)</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="at">visual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="at">speed =</span> <span class="fu">c</span>(<span class="st">&quot;NA*x7&quot;</span>, <span class="st">&quot;x8&quot;</span>, <span class="st">&quot;x9&quot;</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>  <span class="at">visual =</span> <span class="st">&quot;0*speed&quot;</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>  <span class="at">textual =</span> <span class="st">&quot;0*speed&quot;</span>,</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>  <span class="at">speed =</span> <span class="st">&quot;1*speed&quot;</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>)</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat, <span class="at">covariance =</span> cov)</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -546,17 +565,19 @@ packages.</p>
 <div id="example-4.2" class="section level4">
 <h4>Example 4.2</h4>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="st">visual  =~ x1 + start(0.8)*x2 + start(1.2)*x3</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="st">textual =~ x4 + start(0.5)*x5 + start(1.0)*x6</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="st">speed   =~ x7 + start(0.7)*x8 + start(1.8)*x9</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="st">visual  =~ x1 + start(0.8)*x2 + start(1.2)*x3</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="st">textual =~ x4 + start(0.5)*x5 + start(1.0)*x6</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="st">speed   =~ x7 + start(0.7)*x8 + start(1.8)*x9</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">visual =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;start(0.8)*x2&quot;</span>, <span class="st">&quot;start(1.2)*x3&quot;</span>),</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">textual =</span> <span class="fu">c</span>(<span class="st">&quot;x4&quot;</span>, <span class="st">&quot;start(0.5)*x5&quot;</span>, <span class="st">&quot;start(1.0)*x6&quot;</span>),</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">speed =</span> <span class="fu">c</span>(<span class="st">&quot;x7&quot;</span>, <span class="st">&quot;start(0.7)*x8&quot;</span>, <span class="st">&quot;start(1.8)*x9&quot;</span>))</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="at">visual =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;start(0.8)*x2&quot;</span>, <span class="st">&quot;start(1.2)*x3&quot;</span>),</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="at">textual =</span> <span class="fu">c</span>(<span class="st">&quot;x4&quot;</span>, <span class="st">&quot;start(0.5)*x5&quot;</span>, <span class="st">&quot;start(1.0)*x6&quot;</span>),</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="at">speed =</span> <span class="fu">c</span>(<span class="st">&quot;x7&quot;</span>, <span class="st">&quot;start(0.7)*x8&quot;</span>, <span class="st">&quot;start(1.8)*x9&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -567,13 +588,13 @@ packages.</p>
 <div id="example-4.3" class="section level4">
 <h4>Example 4.3</h4>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="st">f =~ y1 + y2 + myLabel*y3 + start(0.5)*y3 + y4</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="st">f =~ y1 + y2 + myLabel*y3 + start(0.5)*y3 + y4</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">f =</span> <span class="fu">c</span>(<span class="st">&quot;y1&quot;</span>, <span class="st">&quot;y2&quot;</span>, <span class="st">&quot;myLabel*y3&quot;</span>, <span class="st">&quot;start(0.5)*y3&quot;</span>, <span class="st">&quot;y4&quot;</span>))</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">f =</span> <span class="fu">c</span>(<span class="st">&quot;y1&quot;</span>, <span class="st">&quot;y2&quot;</span>, <span class="st">&quot;myLabel*y3&quot;</span>, <span class="st">&quot;start(0.5)*y3&quot;</span>, <span class="st">&quot;y4&quot;</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -582,17 +603,19 @@ packages.</p>
 <div id="example-4.4" class="section level4">
 <h4>Example 4.4</h4>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="st">visual  =~ x1 + v2*x2 + v2*x3</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="st">textual =~ x4 + x5 + x6</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="st">speed   =~ x7 + x8 + x9</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="st">visual  =~ x1 + v2*x2 + v2*x3</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="st">textual =~ x4 + x5 + x6</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="st">speed   =~ x7 + x8 + x9</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">visual =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;v2*x2&quot;</span>, <span class="st">&quot;v2*x3&quot;</span>),</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">speed =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>))</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>  <span class="at">visual =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;v2*x2&quot;</span>, <span class="st">&quot;v2*x3&quot;</span>),</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>  <span class="at">speed =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -603,12 +626,12 @@ packages.</p>
 <div id="example-4.5" class="section level4">
 <h4>Example 4.5</h4>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="st">visual  =~ x1 + x2 + equal(&quot;visual=~x2&quot;)*x3</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="st">textual =~ x4 + x5 + x6</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a><span class="st">speed   =~ x7 + x8 + x9</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="fu">sem</span>(model, <span class="at">data =</span> HolzingerSwineford1939)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="st">visual  =~ x1 + x2 + equal(&quot;visual=~x2&quot;)*x3</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="st">textual =~ x4 + x5 + x6</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="st">speed   =~ x7 + x8 + x9</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="st">&#39;</span></span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="fu">sem</span>(model, <span class="at">data =</span> HolzingerSwineford1939)</span></code></pre></div>
 <pre><code>## lavaan 0.6.15 ended normally after 36 iterations
 ## 
 ##   Estimator                                         ML
@@ -624,18 +647,20 @@ packages.</p>
 ##   Degrees of freedom                                25
 ##   P-value (Chi-square)                           0.000</code></pre>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">visual =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;equal(&#39;visual=~x2&#39;)*x3&quot;</span>),</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">speed =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>))</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  <span class="at">visual =</span> <span class="fu">c</span>(<span class="st">&quot;x1&quot;</span>, <span class="st">&quot;x2&quot;</span>, <span class="st">&quot;equal(&#39;visual=~x2&#39;)*x3&quot;</span>),</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="at">speed =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>)</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat)</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
 ## visual =~ x1 + x2 + equal(&#39;visual=~x2&#39;)*x3
 ## textual =~ x4 + x5 + x6
 ## speed =~ x7 + x8 + x9</code></pre>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sem</span>(model, <span class="at">data =</span> HolzingerSwineford1939)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">sem</span>(model, <span class="at">data =</span> HolzingerSwineford1939)</span></code></pre></div>
 <pre><code>## lavaan 0.6.15 ended normally after 36 iterations
 ## 
 ##   Estimator                                         ML
@@ -654,18 +679,20 @@ packages.</p>
 <div id="example-4.6" class="section level4">
 <h4>Example 4.6</h4>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>model.constr <span class="ot">&lt;-</span> <span class="st">&#39; # model with labeled parameters</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="st">                    y ~ b1*x1 + b2*x2 + b3*x3</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="st">                  # constraints</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="st">                    b1 == (b2 + b3)^2</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="st">                    b1 &gt; exp(b2 + b3) &#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>model.constr <span class="ot">&lt;-</span> <span class="st">&quot; # model with labeled parameters</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="st">                    y ~ b1*x1 + b2*x2 + b3*x3</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="st">                  # constraints</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="st">                    b1 == (b2 + b3)^2</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="st">                    b1 &gt; exp(b2 + b3) &quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;b1*x1&quot;</span>, <span class="st">&quot;b2*x2&quot;</span>, <span class="st">&quot;b3*x3&quot;</span>))</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>cstr1 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">b1 =</span> <span class="st">&quot;(b2 + b3)^2&quot;</span>)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>cstr2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">b1 =</span> <span class="st">&quot;exp(b2 + b3)&quot;</span>)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">regression =</span> reg, <span class="at">constraint.equal =</span> cstr1,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">constraint.larger =</span> cstr2)</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y =</span> <span class="fu">c</span>(<span class="st">&quot;b1*x1&quot;</span>, <span class="st">&quot;b2*x2&quot;</span>, <span class="st">&quot;b3*x3&quot;</span>))</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>cstr1 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">b1 =</span> <span class="st">&quot;(b2 + b3)^2&quot;</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>cstr2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">b1 =</span> <span class="st">&quot;exp(b2 + b3)&quot;</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>  <span class="at">regression =</span> reg, <span class="at">constraint.equal =</span> cstr1,</span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>  <span class="at">constraint.larger =</span> cstr2</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>)</span>
+<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [---------Regressions (Direct effects)---------]
 ## 
@@ -682,24 +709,28 @@ packages.</p>
 <h2>Example 5 (Mediation)</h2>
 <p>Source: <a href="https://lavaan.ugent.be/tutorial/mediation.html" class="uri">https://lavaan.ugent.be/tutorial/mediation.html</a></p>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39; # direct effect</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="st">             Y ~ c*X</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="st">           # mediator</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="st">             M ~ a*X</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="st">             Y ~ b*M</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="st">           # indirect effect (a*b)</span></span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a><span class="st">             ab := a*b</span></span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="st">           # total effect</span></span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="st">             total := c + (a*b)</span></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="st">         &#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot; # direct effect</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="st">             Y ~ c*X</span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="st">           # mediator</span></span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="st">             M ~ a*X</span></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="st">             Y ~ b*M</span></span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="st">           # indirect effect (a*b)</span></span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="st">             ab := a*b</span></span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a><span class="st">           # total effect</span></span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a><span class="st">             total := c + (a*b)</span></span>
+<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a><span class="st">         &quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>mediation <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">Y =</span> <span class="st">&quot;c*X&quot;</span>,</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">M =</span> <span class="st">&quot;a*X&quot;</span>,</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">Y =</span> <span class="st">&quot;b*M&quot;</span>)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>indirect <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">ab =</span> <span class="st">&quot;a*b&quot;</span>,</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">total =</span> <span class="st">&quot;c + (a*b)&quot;</span>)</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(mediation, <span class="at">indirect =</span> indirect)</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>mediation <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>  <span class="at">Y =</span> <span class="st">&quot;c*X&quot;</span>,</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>  <span class="at">M =</span> <span class="st">&quot;a*X&quot;</span>,</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>  <span class="at">Y =</span> <span class="st">&quot;b*M&quot;</span></span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>)</span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a>indirect <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>  <span class="at">ab =</span> <span class="st">&quot;a*b&quot;</span>,</span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>  <span class="at">total =</span> <span class="st">&quot;c + (a*b)&quot;</span></span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a>)</span>
+<span id="cb33-10"><a href="#cb33-10" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(mediation, <span class="at">indirect =</span> indirect)</span>
+<span id="cb33-11"><a href="#cb33-11" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----------Mediations (named paths)-----------]
 ## 
@@ -717,25 +748,25 @@ packages.</p>
 <h2>Example 6 (Multilevel SEM)</h2>
 <p>Source: <a href="https://lavaan.ugent.be/tutorial/multilevel.html" class="uri">https://lavaan.ugent.be/tutorial/multilevel.html</a></p>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a><span class="st">    level: 1</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="st">        fw =~ y1 + y2 + y3</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="st">        fw ~ x1 + x2 + x3</span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a><span class="st">    level: 2</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="st">        fb =~ y1 + y2 + y3</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="st">        fb ~ w1 + w2</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a><span class="st">    level: 1</span></span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="st">        fw =~ y1 + y2 + y3</span></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a><span class="st">        fw ~ x1 + x2 + x3</span></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="st">    level: 2</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a><span class="st">        fb =~ y1 + y2 + y3</span></span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a><span class="st">        fb ~ w1 + w2</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>cus <span class="ot">&lt;-</span> </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;level: 1</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="st">    fw =~ y1 + y2 + y3</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="st">    fw ~ x1 + x2 + x3</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="st">level: 2</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="st">    fb =~ y1 + y2 + y3</span></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="st">    fb ~ w1 + w2</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">custom =</span> cus)</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>cus <span class="ot">&lt;-</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>  <span class="st">&quot;level: 1</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="st">    fw =~ y1 + y2 + y3</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="st">    fw ~ x1 + x2 + x3</span></span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a><span class="st">level: 2</span></span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="st">    fb =~ y1 + y2 + y3</span></span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a><span class="st">    fb ~ w1 + w2</span></span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a><span class="st">&quot;</span></span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">custom =</span> cus)</span>
+<span id="cb36-10"><a href="#cb36-10" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [------------Custom Specifications-------------]
 ## 
@@ -750,68 +781,78 @@ packages.</p>
 <h1>Example 7 (total effects)</h1>
 <p>Source: <a href="https://methodenlehre.github.io/SGSCLM-R-course/cfa-and-sem-with-lavaan.html#structural-equation-modelling-sem" class="uri">https://methodenlehre.github.io/SGSCLM-R-course/cfa-and-sem-with-lavaan.html#structural-equation-modelling-sem</a></p>
 <p><code>lavaan</code>:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">&#39;</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="st"># Measurement model</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="st">SUP_Parents =~ sup_parents_p1 + sup_parents_p2 + sup_parents_p3</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="st">SUP_Friends =~ sup_friends_p1 + sup_friends_p2 + sup_friends_p3</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a><span class="st">SE_Academic =~ se_acad_p1 + se_acad_p2 + se_acad_p3</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="st">SE_Social =~ se_social_p1 + se_social_p2 + se_social_p3</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="st">LS  =~ ls_p1 + ls_p2 + ls_p3</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="st"># Structural model </span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a><span class="st"># Regressions</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a><span class="st">SE_Academic ~ b1*SUP_Parents + b3*SUP_Friends</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="st">SE_Social ~ b2*SUP_Parents + b4*SUP_Friends</span></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a><span class="st">LS ~ b5*SUP_Parents + b6*SUP_Friends + b7*SE_Academic + b8*SE_Social </span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a><span class="st"># Residual covariances</span></span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="st">SE_Academic ~~ SE_Social</span></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a><span class="st"># Indirect effects</span></span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a><span class="st">b1b7 := b1*b7</span></span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a><span class="st">b2b8 := b2*b8</span></span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a><span class="st">totalind_eltern := b1*b7 + b2*b8</span></span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="st">b3b7 := b3*b7</span></span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a><span class="st">b4b8 := b4*b8</span></span>
-<span id="cb40-24"><a href="#cb40-24" aria-hidden="true" tabindex="-1"></a><span class="st">totalind_freunde := b3*b7 + b4*b8</span></span>
-<span id="cb40-25"><a href="#cb40-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-26"><a href="#cb40-26" aria-hidden="true" tabindex="-1"></a><span class="st"># Total effects</span></span>
-<span id="cb40-27"><a href="#cb40-27" aria-hidden="true" tabindex="-1"></a><span class="st">total_eltern := b1*b7 + b2*b8 + b5</span></span>
-<span id="cb40-28"><a href="#cb40-28" aria-hidden="true" tabindex="-1"></a><span class="st">total_freunde := b3*b7 + b4*b8 + b6  </span></span>
-<span id="cb40-29"><a href="#cb40-29" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="st"># Measurement model</span></span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="st">SUP_Parents =~ sup_parents_p1 + sup_parents_p2 + sup_parents_p3</span></span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="st">SUP_Friends =~ sup_friends_p1 + sup_friends_p2 + sup_friends_p3</span></span>
+<span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a><span class="st">SE_Academic =~ se_acad_p1 + se_acad_p2 + se_acad_p3</span></span>
+<span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a><span class="st">SE_Social =~ se_social_p1 + se_social_p2 + se_social_p3</span></span>
+<span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a><span class="st">LS  =~ ls_p1 + ls_p2 + ls_p3</span></span>
+<span id="cb38-8"><a href="#cb38-8" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" tabindex="-1"></a><span class="st"># Structural model</span></span>
+<span id="cb38-10"><a href="#cb38-10" tabindex="-1"></a><span class="st"># Regressions</span></span>
+<span id="cb38-11"><a href="#cb38-11" tabindex="-1"></a><span class="st">SE_Academic ~ b1*SUP_Parents + b3*SUP_Friends</span></span>
+<span id="cb38-12"><a href="#cb38-12" tabindex="-1"></a><span class="st">SE_Social ~ b2*SUP_Parents + b4*SUP_Friends</span></span>
+<span id="cb38-13"><a href="#cb38-13" tabindex="-1"></a><span class="st">LS ~ b5*SUP_Parents + b6*SUP_Friends + b7*SE_Academic + b8*SE_Social</span></span>
+<span id="cb38-14"><a href="#cb38-14" tabindex="-1"></a></span>
+<span id="cb38-15"><a href="#cb38-15" tabindex="-1"></a><span class="st"># Residual covariances</span></span>
+<span id="cb38-16"><a href="#cb38-16" tabindex="-1"></a><span class="st">SE_Academic ~~ SE_Social</span></span>
+<span id="cb38-17"><a href="#cb38-17" tabindex="-1"></a></span>
+<span id="cb38-18"><a href="#cb38-18" tabindex="-1"></a><span class="st"># Indirect effects</span></span>
+<span id="cb38-19"><a href="#cb38-19" tabindex="-1"></a><span class="st">b1b7 := b1*b7</span></span>
+<span id="cb38-20"><a href="#cb38-20" tabindex="-1"></a><span class="st">b2b8 := b2*b8</span></span>
+<span id="cb38-21"><a href="#cb38-21" tabindex="-1"></a><span class="st">totalind_eltern := b1*b7 + b2*b8</span></span>
+<span id="cb38-22"><a href="#cb38-22" tabindex="-1"></a><span class="st">b3b7 := b3*b7</span></span>
+<span id="cb38-23"><a href="#cb38-23" tabindex="-1"></a><span class="st">b4b8 := b4*b8</span></span>
+<span id="cb38-24"><a href="#cb38-24" tabindex="-1"></a><span class="st">totalind_freunde := b3*b7 + b4*b8</span></span>
+<span id="cb38-25"><a href="#cb38-25" tabindex="-1"></a></span>
+<span id="cb38-26"><a href="#cb38-26" tabindex="-1"></a><span class="st"># Total effects</span></span>
+<span id="cb38-27"><a href="#cb38-27" tabindex="-1"></a><span class="st">total_eltern := b1*b7 + b2*b8 + b5</span></span>
+<span id="cb38-28"><a href="#cb38-28" tabindex="-1"></a><span class="st">total_freunde := b3*b7 + b4*b8 + b6</span></span>
+<span id="cb38-29"><a href="#cb38-29" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
 <p><code>lavaanExtra</code>:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sup_parents&quot;</span>, <span class="st">&quot;sup_friends&quot;</span>, <span class="st">&quot;se_acad&quot;</span>, <span class="st">&quot;se_social&quot;</span>, <span class="st">&quot;ls&quot;</span>)</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">lapply</span>(x, paste0, <span class="st">&quot;_p&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">setNames</span>(y, x)</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SUP_Parents =</span> y<span class="sc">$</span>sup_parents,</span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">SUP_Friends =</span> y<span class="sc">$</span>sup_friends,</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">SE_Academic =</span> y<span class="sc">$</span>se_acad,</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">SE_Social =</span> y<span class="sc">$</span>se_social,</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">LS =</span> y<span class="sc">$</span>ls)</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;b&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>)</span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;SUP_Parents&quot;</span>, <span class="st">&quot;SUP_Friends&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>), </span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>       <span class="st">&quot;SUP_Parents&quot;</span>, <span class="st">&quot;SUP_Friends&quot;</span>, <span class="st">&quot;SE_Academic&quot;</span>, <span class="st">&quot;SE_Social&quot;</span>)</span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">paste0</span>(b, <span class="st">&quot;*&quot;</span>, d)</span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SE_Academic =</span> e[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)],</span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>            <span class="at">SE_Social =</span> e[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)],</span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>            <span class="at">LS =</span> e[<span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>)])</span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SE_Academic =</span> <span class="st">&quot;SE_Social&quot;</span>)</span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">b1b7 =</span> <span class="st">&quot;b1*b7&quot;</span>,</span>
-<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">b2b8 =</span> <span class="st">&quot;b2*b8&quot;</span>,</span>
-<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">totalind_eltern =</span> <span class="st">&quot;b1*b7 + b2*b8&quot;</span>,</span>
-<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">b3b7 =</span> <span class="st">&quot;b3*b7&quot;</span>,</span>
-<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>            <span class="at">b4b8 =</span> <span class="st">&quot;b4*b8&quot;</span>,</span>
-<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>            <span class="at">totalind_freunde =</span> <span class="st">&quot;b3*b7 + b4*b8&quot;</span>,</span>
-<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>            <span class="at">total_eltern =</span> <span class="st">&quot;b1*b7 + b2*b8 + b5&quot;</span>,</span>
-<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>            <span class="at">total_freunde =</span> <span class="st">&quot;b3*b7 + b4*b8 + b6&quot;</span>)</span>
-<span id="cb41-29"><a href="#cb41-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-30"><a href="#cb41-30" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">regression =</span> reg, <span class="at">covariance =</span> cov, </span>
-<span id="cb41-31"><a href="#cb41-31" aria-hidden="true" tabindex="-1"></a>                      <span class="at">indirect =</span> ind, <span class="at">latent =</span> lat)</span>
-<span id="cb41-32"><a href="#cb41-32" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sup_parents&quot;</span>, <span class="st">&quot;sup_friends&quot;</span>, <span class="st">&quot;se_acad&quot;</span>, <span class="st">&quot;se_social&quot;</span>, <span class="st">&quot;ls&quot;</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">lapply</span>(x, paste0, <span class="st">&quot;_p&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">setNames</span>(y, x)</span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>  <span class="at">SUP_Parents =</span> y<span class="sc">$</span>sup_parents,</span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>  <span class="at">SUP_Friends =</span> y<span class="sc">$</span>sup_friends,</span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a>  <span class="at">SE_Academic =</span> y<span class="sc">$</span>se_acad,</span>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a>  <span class="at">SE_Social =</span> y<span class="sc">$</span>se_social,</span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a>  <span class="at">LS =</span> y<span class="sc">$</span>ls</span>
+<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a>)</span>
+<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a></span>
+<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;b&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span>)</span>
+<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">&quot;SUP_Parents&quot;</span>, <span class="st">&quot;SUP_Friends&quot;</span>), <span class="at">each =</span> <span class="dv">2</span>),</span>
+<span id="cb39-15"><a href="#cb39-15" tabindex="-1"></a>  <span class="st">&quot;SUP_Parents&quot;</span>, <span class="st">&quot;SUP_Friends&quot;</span>, <span class="st">&quot;SE_Academic&quot;</span>, <span class="st">&quot;SE_Social&quot;</span></span>
+<span id="cb39-16"><a href="#cb39-16" tabindex="-1"></a>)</span>
+<span id="cb39-17"><a href="#cb39-17" tabindex="-1"></a>e <span class="ot">&lt;-</span> <span class="fu">paste0</span>(b, <span class="st">&quot;*&quot;</span>, d)</span>
+<span id="cb39-18"><a href="#cb39-18" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="#cb39-19" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb39-20"><a href="#cb39-20" tabindex="-1"></a>  <span class="at">SE_Academic =</span> e[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)],</span>
+<span id="cb39-21"><a href="#cb39-21" tabindex="-1"></a>  <span class="at">SE_Social =</span> e[<span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">4</span>)],</span>
+<span id="cb39-22"><a href="#cb39-22" tabindex="-1"></a>  <span class="at">LS =</span> e[<span class="fu">c</span>(<span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>)]</span>
+<span id="cb39-23"><a href="#cb39-23" tabindex="-1"></a>)</span>
+<span id="cb39-24"><a href="#cb39-24" tabindex="-1"></a></span>
+<span id="cb39-25"><a href="#cb39-25" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">SE_Academic =</span> <span class="st">&quot;SE_Social&quot;</span>)</span>
+<span id="cb39-26"><a href="#cb39-26" tabindex="-1"></a></span>
+<span id="cb39-27"><a href="#cb39-27" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb39-28"><a href="#cb39-28" tabindex="-1"></a>  <span class="at">b1b7 =</span> <span class="st">&quot;b1*b7&quot;</span>,</span>
+<span id="cb39-29"><a href="#cb39-29" tabindex="-1"></a>  <span class="at">b2b8 =</span> <span class="st">&quot;b2*b8&quot;</span>,</span>
+<span id="cb39-30"><a href="#cb39-30" tabindex="-1"></a>  <span class="at">totalind_eltern =</span> <span class="st">&quot;b1*b7 + b2*b8&quot;</span>,</span>
+<span id="cb39-31"><a href="#cb39-31" tabindex="-1"></a>  <span class="at">b3b7 =</span> <span class="st">&quot;b3*b7&quot;</span>,</span>
+<span id="cb39-32"><a href="#cb39-32" tabindex="-1"></a>  <span class="at">b4b8 =</span> <span class="st">&quot;b4*b8&quot;</span>,</span>
+<span id="cb39-33"><a href="#cb39-33" tabindex="-1"></a>  <span class="at">totalind_freunde =</span> <span class="st">&quot;b3*b7 + b4*b8&quot;</span>,</span>
+<span id="cb39-34"><a href="#cb39-34" tabindex="-1"></a>  <span class="at">total_eltern =</span> <span class="st">&quot;b1*b7 + b2*b8 + b5&quot;</span>,</span>
+<span id="cb39-35"><a href="#cb39-35" tabindex="-1"></a>  <span class="at">total_freunde =</span> <span class="st">&quot;b3*b7 + b4*b8 + b6&quot;</span></span>
+<span id="cb39-36"><a href="#cb39-36" tabindex="-1"></a>)</span>
+<span id="cb39-37"><a href="#cb39-37" tabindex="-1"></a></span>
+<span id="cb39-38"><a href="#cb39-38" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
+<span id="cb39-39"><a href="#cb39-39" tabindex="-1"></a>  <span class="at">regression =</span> reg, <span class="at">covariance =</span> cov,</span>
+<span id="cb39-40"><a href="#cb39-40" tabindex="-1"></a>  <span class="at">indirect =</span> ind, <span class="at">latent =</span> lat</span>
+<span id="cb39-41"><a href="#cb39-41" tabindex="-1"></a>)</span>
+<span id="cb39-42"><a href="#cb39-42" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
