@@ -4,14 +4,10 @@
 \alias{lavaan_reg}
 \title{Extract relevant regression indices from lavaan model}
 \usage{
-lavaan_reg(fit, estimate = "B", nice_table = FALSE, ...)
+lavaan_reg(fit, nice_table = FALSE, ...)
 }
 \arguments{
 \item{fit}{lavaan fit object to extract fit indices from}
-
-\item{estimate}{What estimate to use, either the standardized
-estimate ("B", default), or unstandardized
-estimate ("b").}
 
 \item{nice_table}{Logical, whether to print the table as a
 \link[rempsyc:nice_table]{rempsyc::nice_table} as well as print the
@@ -27,16 +23,15 @@ p-value, as well as the unstandardized regression coefficient
 }
 \description{
 Extract relevant regression indices from lavaan model through
-\link[lavaan:parameterEstimates]{lavaan::parameterEstimates} with \code{standardized = TRUE}. In this
-case, the beta (B) represents the resulting \code{std.all} column.
-See "Value" section for more details.
+\link[lavaan:parameterEstimates]{lavaan::parameterEstimates} and \link[lavaan:standardizedSolution]{lavaan::standardizedsolution}.
 }
 \examples{
 \dontshow{if (requireNamespace("lavaan", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+x <- paste0("x", 1:9)
 (latent <- list(
-  visual = paste0("x", 1:3),
-  textual = paste0("x", 4:6),
-  speed = paste0("x", 7:9)
+  visual = x[1:3],
+  textual = x[4:6],
+  speed = x[7:9]
 ))
 
 (regression <- list(
@@ -52,10 +47,3 @@ fit <- sem(HS.model, data = HolzingerSwineford1939)
 lavaan_reg(fit)
 \dontshow{\}) # examplesIf}
 }
-\keyword{CFA}
-\keyword{analysis}
-\keyword{equation}
-\keyword{lavaan}
-\keyword{modeling}
-\keyword{path}
-\keyword{structural}

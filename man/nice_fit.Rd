@@ -4,7 +4,13 @@
 \alias{nice_fit}
 \title{Extract relevant fit indices from lavaan model}
 \usage{
-nice_fit(model, model.labels, nice_table = FALSE, stars = FALSE)
+nice_fit(
+  model,
+  model.labels,
+  nice_table = FALSE,
+  guidelines = TRUE,
+  stars = FALSE
+)
 }
 \arguments{
 \item{model}{lavaan model object(s) to extract fit indices from}
@@ -14,28 +20,54 @@ for \code{model}, default to the names of the list. Otherwise, if the list
 is unnamed, defaults to generic numbering.}
 
 \item{nice_table}{Logical, whether to print the table as a
-\link[rempsyc:nice_table]{rempsyc::nice_table} as well as print the
-reference values at the bottom of the table.}
+\link[rempsyc:nice_table]{rempsyc::nice_table}.}
+
+\item{guidelines}{Logical, if \code{nice_table = TRUE}, whether to display
+include reference values based on Schreiber (2017), Table 3, at the
+bottom of the table.}
 
 \item{stars}{Logical, if \code{nice_table = TRUE}, whether to display
 significance stars (defaults to \code{FALSE}).}
 }
 \value{
 A dataframe, representing select fit indices (chi2, df, chi2/df,
-p-value of the chi2 test, CFI, TLI, RMSEA and its 90\% CI, SRMR,
-AIC, and BIC).
+p-value of the chi2 test, CFI, TLI, RMSEA and its 90\% CI,
+unbiased SRMR, AIC, and BIC).
 }
 \description{
 Compares fit from one or several lavaan models. Also
 optionally includes references values. The reference fit values are
-based on Schreiber et al. (2006).
+based on Schreiber (2017), Table 3.
+}
+\details{
+Note that \code{nice_fit} reports the unbiased SRMR through
+\code{\link[lavaan:lavResiduals]{lavaan::lavResiduals()}} because the standard SRMR is upwardly
+biased (\doi{10.1007/s11336-016-9552-7}) in a noticeable
+way for smaller samples (thanks to James Uanhoro for this change).
+
+If using \code{guidelines = TRUE}, please carefully consider the following 2023
+quote from Terrence D. Jorgensen:
+
+\emph{I do not recommend including cutoffs in the table, as doing so would
+perpetuate their misuse. Fit indices are not test statistics, and their
+suggested cutoffs are not critical values associated with known Type I
+error rates. Numerous simulation studies have shown how poorly cutoffs
+perform in model selection (e.g., , Jorgensen et al. (2018). Instead of
+test statistics, fit indices were designed to be measures of effect size
+(practical significance), which complement the chi-squared test of
+statistical significance. The range of RMSEA interpretations above is more
+reminiscent of the range of small/medium/large effect sizes proposed by
+Cohen for use in power analyses, which are as arbitrary as alpha levels,
+but at least they better respect the idea that (mis)fit is a matter of
+magnitude, not nearly so simple as "perfect or imperfect."}
 }
 \examples{
 \dontshow{if (requireNamespace("lavaan", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+x <- paste0("x", 1:9)
 (latent <- list(
-  visual = paste0("x", 1:3),
-  textual = paste0("x", 4:6),
-  speed = paste0("x", 7:9)
+  visual = x[1:3],
+  textual = x[4:6],
+  speed = x[7:9]
 ))
 
 (regression <- list(
@@ -54,12 +86,5 @@ nice_fit(fit)
 \references{
 Schreiber, J. B. (2017). Update to core reporting practices in
 structural equation modeling. \emph{Research in social and administrative pharmacy},
-\emph{13}(3), 634-643. https://doi.org/10.1016/j.sapharm.2016.06.006
+\emph{13}(3), 634-643. \doi{10.1016/j.sapharm.2016.06.006}
 }
-\keyword{CFA}
-\keyword{analysis}
-\keyword{equation}
-\keyword{lavaan}
-\keyword{modeling}
-\keyword{path}
-\keyword{structural}

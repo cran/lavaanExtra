@@ -11,18 +11,19 @@
 #' @param covs Logical, whether to plot covariances. Defaults to FALSE.
 #' @param stars Which links to plot significance stars for. One of
 #'              `c("regress", "latent", "covs")`.
-#' @param sig Significance threshold.
+#' @param sig Which significance threshold to use to plot coefficients (defaults
+#'  to .05). To plot all coefficients, set `sig` to 1.
 #' @param graph_options Read from left to right, rather than from top to bottom.
 #' @param ... Arguments to be passed to function [lavaanPlot::lavaanPlot].
-#' @keywords CFA lavaan plot fit
 #' @return A lavaanPlot, of classes `c("grViz", "htmlwidget")`, representing the
 #'         specified `lavaan` model.
 #' @export
 #' @examplesIf requireNamespace("lavaan", quietly = TRUE) && requireNamespace("lavaanPlot", quietly = TRUE)
+#' x <- paste0("x", 1:9)
 #' (latent <- list(
-#'   visual = paste0("x", 1:3),
-#'   textual = paste0("x", 4:6),
-#'   speed = paste0("x", 7:9)
+#'   visual = x[1:3],
+#'   textual = x[4:6],
+#'   speed = x[7:9]
 #' ))
 #'
 #' HS.model <- write_lavaan(latent = latent)

@@ -1,9 +1,10 @@
 suppressWarnings(library(lavaan))
 
+x <- paste0("x", 1:9)
 latent <- list(
-  visual = paste0("x", 1:3),
-  textual = paste0("x", 4:6),
-  speed = paste0("x", 7:9)
+  visual = x[1:3],
+  textual = x[4:6],
+  speed = x[7:9]
 )
 
 regression <- list(
@@ -32,19 +33,5 @@ test_that("nice_fit as nice_table", {
   expect_s3_class(
     lavaan_cov(fit, nice_table = TRUE),
     c("nice_table", "flextable")
-  )
-})
-
-test_that("nice_fit estimates", {
-  expect_s3_class(
-    lavaan_cov(fit, estimate = "b"),
-    c("lavaan.data.frame", "data.frame")
-  )
-  expect_s3_class(
-    lavaan_cov(fit, estimate = "B"),
-    c("lavaan.data.frame", "data.frame")
-  )
-  expect_error(
-    lavaan_cov(fit, estimate = "C"),
   )
 })

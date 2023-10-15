@@ -21,10 +21,11 @@
 #'         ("est") and its confidence interval ("ci.lower", "ci.upper").
 #' @export
 #' @examplesIf requireNamespace("lavaan", quietly = TRUE) && requireNamespace("sjlabelled", quietly = TRUE) && requireNamespace("stringdist", quietly = TRUE)
+#' x <- paste0("x", 1:9)
 #' (latent <- list(
-#'   visual = paste0("x", 1:3),
-#'   textual = paste0("x", 4:6),
-#'   speed = paste0("x", 7:9)
+#'   visual = x[1:3],
+#'   textual = x[4:6],
+#'   speed = x[7:9]
 #' ))
 #'
 #' (regression <- list(
@@ -77,7 +78,7 @@ nice_modindices <- function(fit,
     if (!inherits(labels, "data.frame")) {
       labels <- as.data.frame(as.list(labels))
     }
-    for (i in seq(nrow(x))) {
+    for (i in seq_len(nrow(x))) {
       x[i, "lhs.labels"] <- ifelse(
         x$lhs[i] %in% names(labels),
         labels[which(x$lhs[i] == names(labels))],
@@ -93,8 +94,8 @@ nice_modindices <- function(fit,
       x$similarity <- NA
     } else {
       x$similarity <- stringdist::stringsim(x$lhs.labels,
-                                            x$rhs.labels,
-                                            method = method
+        x$rhs.labels,
+        method = method
       )
     }
     x$similar <- x$similarity > .50

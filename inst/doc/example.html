@@ -353,6 +353,10 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 5 (Mediation)</a></li>
 <li><a href="#example-6-multilevel-sem" id="toc-example-6-multilevel-sem">Example 6 (Multilevel SEM)</a></li>
 <li><a href="#example-7-total-effects" id="toc-example-7-total-effects">Example 7 (total effects)</a></li>
+<li><a href="#example-8-intercepts" id="toc-example-8-intercepts">Example 8 (intercepts)</a></li>
+<li><a href="#example-9-thresholds" id="toc-example-9-thresholds">Example 9 (thresholds)</a></li>
+<li><a href="#example-10-longitudinal-invariance" id="toc-example-10-longitudinal-invariance">Example 10 (longitudinal
+invariance)</a></li>
 </ul>
 </div>
 
@@ -361,7 +365,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 project at <a href="https://lavaan.ugent.be" class="uri">https://lavaan.ugent.be</a>. Let’s start by loading both
 packages.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(lavaan)</span></code></pre></div>
-<pre><code>## Warning: package &#39;lavaan&#39; was built under R version 4.2.3</code></pre>
+<pre><code>## Warning: package &#39;lavaan&#39; was built under R version 4.3.1</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(lavaanExtra)</span></code></pre></div>
 <div id="example-1-model-syntax-1" class="section level2">
 <h2>Example 1 (Model syntax 1):</h2>
@@ -405,10 +409,12 @@ packages.</p>
 <span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>)</span>
 <span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a>int <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;y1&quot;</span>, <span class="st">&quot;f1&quot;</span>)</span>
 <span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a>myModel <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
-<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  <span class="at">regression =</span> reg, <span class="at">latent =</span> lat, <span class="at">covariance =</span> cov,</span>
-<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>  <span class="at">intercept =</span> int</span>
-<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>)</span>
-<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="fu">cat</span>(myModel)</span></code></pre></div>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a>  <span class="at">regression =</span> reg,</span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a>  <span class="at">latent =</span> lat,</span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a>  <span class="at">covariance =</span> cov,</span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a>  <span class="at">intercept =</span> int</span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a>)</span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="fu">cat</span>(myModel)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -495,8 +501,12 @@ packages.</p>
 <span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>  <span class="at">y4 =</span> <span class="st">&quot;y8&quot;</span>,</span>
 <span id="cb11-15"><a href="#cb11-15" tabindex="-1"></a>  <span class="at">y6 =</span> <span class="st">&quot;y8&quot;</span></span>
 <span id="cb11-16"><a href="#cb11-16" tabindex="-1"></a>)</span>
-<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">latent =</span> lat, <span class="at">regression =</span> reg, <span class="at">covariance =</span> cov)</span>
-<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
+<span id="cb11-17"><a href="#cb11-17" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
+<span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>  <span class="at">latent =</span> lat,</span>
+<span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>  <span class="at">regression =</span> reg,</span>
+<span id="cb11-20"><a href="#cb11-20" tabindex="-1"></a>  <span class="at">covariance =</span> cov</span>
+<span id="cb11-21"><a href="#cb11-21" tabindex="-1"></a>)</span>
+<span id="cb11-22"><a href="#cb11-22" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----Latent variables (measurement model)-----]
 ## 
@@ -730,7 +740,7 @@ packages.</p>
 <span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a>  <span class="at">ab =</span> <span class="st">&quot;a*b&quot;</span>,</span>
 <span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a>  <span class="at">total =</span> <span class="st">&quot;c + (a*b)&quot;</span></span>
 <span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a>)</span>
-<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(mediation, <span class="at">indirect =</span> indirect)</span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(<span class="at">mediation =</span> mediation, <span class="at">indirect =</span> indirect)</span>
 <span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a><span class="fu">cat</span>(model)</span></code></pre></div>
 <pre><code>## ##################################################
 ## # [-----------Mediations (named paths)-----------]
@@ -778,8 +788,8 @@ packages.</p>
 ##     fb =~ y1 + y2 + y3
 ##     fb ~ w1 + w2</code></pre>
 </div>
-<div id="example-7-total-effects" class="section level1">
-<h1>Example 7 (total effects)</h1>
+<div id="example-7-total-effects" class="section level2">
+<h2>Example 7 (total effects)</h2>
 <p>Source: <a href="https://methodenlehre.github.io/SGSCLM-R-course/cfa-and-sem-with-lavaan.html#structural-equation-modelling-sem" class="uri">https://methodenlehre.github.io/SGSCLM-R-course/cfa-and-sem-with-lavaan.html#structural-equation-modelling-sem</a></p>
 <p><code>lavaan</code>:</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>model_mediation <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
@@ -886,6 +896,228 @@ packages.</p>
 ## totalind_freunde := b3*b7 + b4*b8
 ## total_eltern := b1*b7 + b2*b8 + b5
 ## total_freunde := b3*b7 + b4*b8 + b6</code></pre>
+</div>
+<div id="example-8-intercepts" class="section level2">
+<h2>Example 8 (intercepts)</h2>
+<p>Source: <a href="https://lavaan.ugent.be/tutorial/means.html" class="uri">https://lavaan.ugent.be/tutorial/means.html</a></p>
+<p><code>lavaan</code>:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a>HS.model <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="st"># three-factor model</span></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="st">  visual  =~ x1 + x2 + x3</span></span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="st">  textual =~ x4 + x5 + x6</span></span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a><span class="st">  speed   =~ x7 + x8 + x9</span></span>
+<span id="cb43-6"><a href="#cb43-6" tabindex="-1"></a><span class="st"># intercepts with fixed values</span></span>
+<span id="cb43-7"><a href="#cb43-7" tabindex="-1"></a><span class="st">  x1 + x2 + x3 + x4 ~ 0.5*1</span></span>
+<span id="cb43-8"><a href="#cb43-8" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p><code>lavaanExtra</code>:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a>  <span class="at">visual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>),</span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a>  <span class="at">textual =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">4</span><span class="sc">:</span><span class="dv">6</span>),</span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a>  <span class="at">speed =</span> <span class="fu">paste0</span>(<span class="st">&quot;x&quot;</span>, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>)</span>
+<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a>)</span>
+<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a></span>
+<span id="cb44-7"><a href="#cb44-7" tabindex="-1"></a>cus <span class="ot">&lt;-</span> <span class="st">&quot;x1 + x2 + x3 + x4 ~ 0.5*1&quot;</span></span>
+<span id="cb44-8"><a href="#cb44-8" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="#cb44-9" tabindex="-1"></a>HS.model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
+<span id="cb44-10"><a href="#cb44-10" tabindex="-1"></a>  <span class="at">latent =</span> lat, <span class="at">custom =</span> cus</span>
+<span id="cb44-11"><a href="#cb44-11" tabindex="-1"></a>)</span>
+<span id="cb44-12"><a href="#cb44-12" tabindex="-1"></a><span class="fu">cat</span>(HS.model)</span></code></pre></div>
+<pre><code>## ##################################################
+## # [-----Latent variables (measurement model)-----]
+## 
+## visual =~ x1 + x2 + x3
+## textual =~ x4 + x5 + x6
+## speed =~ x7 + x8 + x9
+## 
+## ##################################################
+## # [------------Custom Specifications-------------]
+## 
+## x1 + x2 + x3 + x4 ~ 0.5*1</code></pre>
+</div>
+<div id="example-9-thresholds" class="section level2">
+<h2>Example 9 (thresholds)</h2>
+<p>Source: <a href="https://tdjorgensen.github.io/TDJorgensen/CatMeasEq/Jorgensen.CatMeasEq.pdf" class="uri">https://tdjorgensen.github.io/TDJorgensen/CatMeasEq/Jorgensen.CatMeasEq.pdf</a></p>
+<p><code>lavaan</code>:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>mod2 <span class="ot">&lt;-</span> <span class="st">&quot;</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="st">## LIR means</span></span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="st">  y2w1 ~ mean1*1</span></span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="st">  y2w2 ~ mean2*1</span></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="st">## LIR (co)variances</span></span>
+<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a><span class="st">  y2w1 ~~ var1*y2w1 + y2w2</span></span>
+<span id="cb46-7"><a href="#cb46-7" tabindex="-1"></a><span class="st">  y2w2 ~~ var2*y2w2</span></span>
+<span id="cb46-8"><a href="#cb46-8" tabindex="-1"></a><span class="st">## thresholds link LIRs to observed items</span></span>
+<span id="cb46-9"><a href="#cb46-9" tabindex="-1"></a><span class="st">  y2w1 | thr1*t1</span></span>
+<span id="cb46-10"><a href="#cb46-10" tabindex="-1"></a><span class="st">  y2w2 | thr2*t1</span></span>
+<span id="cb46-11"><a href="#cb46-11" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p><code>lavaanExtra</code>:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a>  <span class="at">y2w1 =</span> <span class="st">&quot;mean1*1&quot;</span>,</span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>  <span class="at">y2w2 =</span> <span class="st">&quot;mean2*1&quot;</span></span>
+<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a>)</span>
+<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb47-7"><a href="#cb47-7" tabindex="-1"></a>  <span class="at">y2w1 =</span> <span class="fu">c</span>(<span class="st">&quot;var1*y2w1&quot;</span>, <span class="st">&quot;y2w2&quot;</span>),</span>
+<span id="cb47-8"><a href="#cb47-8" tabindex="-1"></a>  <span class="at">y2w2 =</span> <span class="st">&quot;var2*y2w2&quot;</span></span>
+<span id="cb47-9"><a href="#cb47-9" tabindex="-1"></a>)</span>
+<span id="cb47-10"><a href="#cb47-10" tabindex="-1"></a></span>
+<span id="cb47-11"><a href="#cb47-11" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb47-12"><a href="#cb47-12" tabindex="-1"></a>  <span class="at">y2w1 =</span> <span class="st">&quot;thr1*t1&quot;</span>,</span>
+<span id="cb47-13"><a href="#cb47-13" tabindex="-1"></a>  <span class="at">y2w2 =</span> <span class="st">&quot;thr2*t1&quot;</span></span>
+<span id="cb47-14"><a href="#cb47-14" tabindex="-1"></a>)</span>
+<span id="cb47-15"><a href="#cb47-15" tabindex="-1"></a></span>
+<span id="cb47-16"><a href="#cb47-16" tabindex="-1"></a>HS.model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
+<span id="cb47-17"><a href="#cb47-17" tabindex="-1"></a>  <span class="at">regression =</span> reg,</span>
+<span id="cb47-18"><a href="#cb47-18" tabindex="-1"></a>  <span class="at">covariance =</span> cov,</span>
+<span id="cb47-19"><a href="#cb47-19" tabindex="-1"></a>  <span class="at">threshold =</span> thres</span>
+<span id="cb47-20"><a href="#cb47-20" tabindex="-1"></a>)</span>
+<span id="cb47-21"><a href="#cb47-21" tabindex="-1"></a><span class="fu">cat</span>(HS.model)</span></code></pre></div>
+<pre><code>## ##################################################
+## # [---------Regressions (Direct effects)---------]
+## 
+## y2w1 ~ mean1*1
+## y2w2 ~ mean2*1
+## 
+## ##################################################
+## # [------------------Covariances-----------------]
+## 
+## y2w1 ~~ var1*y2w1 + y2w2
+## y2w2 ~~ var2*y2w2
+## 
+## ##################################################
+## # [------------------Thresholds------------------]
+## 
+## y2w1 | thr1*t1
+## y2w2 | thr2*t1</code></pre>
+</div>
+<div id="example-10-longitudinal-invariance" class="section level2">
+<h2>Example 10 (longitudinal invariance)</h2>
+<p>Source: <a href="https://thechangelab.stanford.edu/tutorials/growth-modeling/modeling-change-latent-vars-ordinal-indicators-lavaan/" class="uri">https://thechangelab.stanford.edu/tutorials/growth-modeling/modeling-change-latent-vars-ordinal-indicators-lavaan/</a></p>
+<p><code>lavaan</code>:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>configural_invar <span class="ot">&lt;-</span> <span class="st">&quot; #opening quote</span></span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a><span class="st">#factor loadings</span></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="st">  eta1 =~ 1*t1_sc + #for identification</span></span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a><span class="st">          t1_intp +</span></span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a><span class="st">          t1_ext</span></span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="st">  eta2 =~ 1*t2_sc + #for identification</span></span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a><span class="st">          t2_intp +</span></span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a><span class="st">          t2_ext</span></span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a><span class="st">  eta3 =~ 1*t4_sc + #for identification</span></span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a><span class="st">          t4_intp +</span></span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a><span class="st">          t4_ext</span></span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a><span class="st">#latent variable variances</span></span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a><span class="st">   eta1~~eta1</span></span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a><span class="st">   eta2~~eta2</span></span>
+<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a><span class="st">   eta3~~eta3</span></span>
+<span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a></span>
+<span id="cb49-18"><a href="#cb49-18" tabindex="-1"></a><span class="st">#latent variable covariances</span></span>
+<span id="cb49-19"><a href="#cb49-19" tabindex="-1"></a><span class="st">   eta1~~eta2</span></span>
+<span id="cb49-20"><a href="#cb49-20" tabindex="-1"></a><span class="st">   eta1~~eta3</span></span>
+<span id="cb49-21"><a href="#cb49-21" tabindex="-1"></a><span class="st">   eta2~~eta3</span></span>
+<span id="cb49-22"><a href="#cb49-22" tabindex="-1"></a></span>
+<span id="cb49-23"><a href="#cb49-23" tabindex="-1"></a><span class="st">#latent variable means</span></span>
+<span id="cb49-24"><a href="#cb49-24" tabindex="-1"></a><span class="st">   eta1~0*1 #for scaling</span></span>
+<span id="cb49-25"><a href="#cb49-25" tabindex="-1"></a><span class="st">   eta2~0*1 #for scaling</span></span>
+<span id="cb49-26"><a href="#cb49-26" tabindex="-1"></a><span class="st">   eta3~0*1 #for scaling</span></span>
+<span id="cb49-27"><a href="#cb49-27" tabindex="-1"></a></span>
+<span id="cb49-28"><a href="#cb49-28" tabindex="-1"></a><span class="st">#propensity variances</span></span>
+<span id="cb49-29"><a href="#cb49-29" tabindex="-1"></a><span class="st">   t1_sc  ~~ 1*t1_sc</span></span>
+<span id="cb49-30"><a href="#cb49-30" tabindex="-1"></a><span class="st">   t1_intp~~ 1*t1_intp</span></span>
+<span id="cb49-31"><a href="#cb49-31" tabindex="-1"></a><span class="st">   t1_ext ~~ 1*t1_ext</span></span>
+<span id="cb49-32"><a href="#cb49-32" tabindex="-1"></a><span class="st">   t2_sc  ~~ 1*t2_sc</span></span>
+<span id="cb49-33"><a href="#cb49-33" tabindex="-1"></a><span class="st">   t2_intp~~ 1*t2_intp</span></span>
+<span id="cb49-34"><a href="#cb49-34" tabindex="-1"></a><span class="st">   t2_ext ~~ 1*t2_ext</span></span>
+<span id="cb49-35"><a href="#cb49-35" tabindex="-1"></a><span class="st">   t4_sc  ~~ 1*t4_sc</span></span>
+<span id="cb49-36"><a href="#cb49-36" tabindex="-1"></a><span class="st">   t4_intp~~ 1*t4_intp</span></span>
+<span id="cb49-37"><a href="#cb49-37" tabindex="-1"></a><span class="st">   t4_ext ~~ 1*t4_ext</span></span>
+<span id="cb49-38"><a href="#cb49-38" tabindex="-1"></a></span>
+<span id="cb49-39"><a href="#cb49-39" tabindex="-1"></a><span class="st">#unique covariances</span></span>
+<span id="cb49-40"><a href="#cb49-40" tabindex="-1"></a></span>
+<span id="cb49-41"><a href="#cb49-41" tabindex="-1"></a></span>
+<span id="cb49-42"><a href="#cb49-42" tabindex="-1"></a><span class="st">#observed variable intercepts/thresholds (4 categories = 3 thresholds)</span></span>
+<span id="cb49-43"><a href="#cb49-43" tabindex="-1"></a><span class="st">   t1_sc   |t1 + t2 + t3</span></span>
+<span id="cb49-44"><a href="#cb49-44" tabindex="-1"></a><span class="st">   t1_intp |t1 + t2 + t3</span></span>
+<span id="cb49-45"><a href="#cb49-45" tabindex="-1"></a><span class="st">   t1_ext  |t1 + t2 + t3</span></span>
+<span id="cb49-46"><a href="#cb49-46" tabindex="-1"></a><span class="st">   t2_sc   |t1 + t2 + t3</span></span>
+<span id="cb49-47"><a href="#cb49-47" tabindex="-1"></a><span class="st">   t2_intp |t1 + t2 + t3</span></span>
+<span id="cb49-48"><a href="#cb49-48" tabindex="-1"></a><span class="st">   t2_ext  |t1 + t2 + t3</span></span>
+<span id="cb49-49"><a href="#cb49-49" tabindex="-1"></a><span class="st">   t4_sc   |t1 + t2 + t3</span></span>
+<span id="cb49-50"><a href="#cb49-50" tabindex="-1"></a><span class="st">   t4_intp |t1 + t2 + t3</span></span>
+<span id="cb49-51"><a href="#cb49-51" tabindex="-1"></a><span class="st">   t4_ext  |t1 + t2 + t3</span></span>
+<span id="cb49-52"><a href="#cb49-52" tabindex="-1"></a><span class="st">&quot;</span> <span class="co"># closing quote</span></span></code></pre></div>
+<p><code>lavaanExtra</code>:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a>eta <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;eta&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;t&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>term <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;sc&quot;</span>, <span class="st">&quot;intp&quot;</span>, <span class="st">&quot;ext&quot;</span>)</span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>tnames <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">rep</span>(t[<span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="dv">4</span>)], <span class="at">each =</span> <span class="dv">3</span>), <span class="st">&quot;_&quot;</span>, term)</span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a>tnames2 <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;1*&quot;</span>, tnames)</span>
+<span id="cb50-6"><a href="#cb50-6" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb50-8"><a href="#cb50-8" tabindex="-1"></a>  <span class="at">eta1 =</span> <span class="fu">c</span>(tnames2[<span class="dv">1</span>], tnames[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]),</span>
+<span id="cb50-9"><a href="#cb50-9" tabindex="-1"></a>  <span class="at">eta2 =</span> <span class="fu">c</span>(tnames2[<span class="dv">4</span>], tnames[<span class="dv">5</span><span class="sc">:</span><span class="dv">6</span>]),</span>
+<span id="cb50-10"><a href="#cb50-10" tabindex="-1"></a>  <span class="at">eta3 =</span> <span class="fu">c</span>(tnames2[<span class="dv">7</span>], tnames[<span class="dv">8</span><span class="sc">:</span><span class="dv">9</span>])</span>
+<span id="cb50-11"><a href="#cb50-11" tabindex="-1"></a>)</span>
+<span id="cb50-12"><a href="#cb50-12" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="#cb50-13" tabindex="-1"></a>cov <span class="ot">&lt;-</span> <span class="fu">as.list</span>(<span class="fu">c</span>(eta, eta[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>], eta[<span class="dv">3</span>], tnames2))</span>
+<span id="cb50-14"><a href="#cb50-14" tabindex="-1"></a><span class="fu">names</span>(cov) <span class="ot">&lt;-</span> <span class="fu">c</span>(eta, eta[<span class="dv">1</span>], eta[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>], tnames)</span>
+<span id="cb50-15"><a href="#cb50-15" tabindex="-1"></a></span>
+<span id="cb50-16"><a href="#cb50-16" tabindex="-1"></a>thres <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">list</span>(t[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]), <span class="dv">9</span>)</span>
+<span id="cb50-17"><a href="#cb50-17" tabindex="-1"></a><span class="fu">names</span>(thres) <span class="ot">&lt;-</span> tnames</span>
+<span id="cb50-18"><a href="#cb50-18" tabindex="-1"></a></span>
+<span id="cb50-19"><a href="#cb50-19" tabindex="-1"></a>reg <span class="ot">&lt;-</span> <span class="fu">as.list</span>(<span class="fu">setNames</span>(<span class="fu">rep</span>(<span class="st">&quot;0*1&quot;</span>, <span class="dv">3</span>), eta))</span>
+<span id="cb50-20"><a href="#cb50-20" tabindex="-1"></a></span>
+<span id="cb50-21"><a href="#cb50-21" tabindex="-1"></a>HS.model <span class="ot">&lt;-</span> <span class="fu">write_lavaan</span>(</span>
+<span id="cb50-22"><a href="#cb50-22" tabindex="-1"></a>  <span class="at">regression =</span> reg,</span>
+<span id="cb50-23"><a href="#cb50-23" tabindex="-1"></a>  <span class="at">latent =</span> lat,</span>
+<span id="cb50-24"><a href="#cb50-24" tabindex="-1"></a>  <span class="at">covariance =</span> cov,</span>
+<span id="cb50-25"><a href="#cb50-25" tabindex="-1"></a>  <span class="at">threshold =</span> thres</span>
+<span id="cb50-26"><a href="#cb50-26" tabindex="-1"></a>)</span>
+<span id="cb50-27"><a href="#cb50-27" tabindex="-1"></a><span class="fu">cat</span>(HS.model)</span></code></pre></div>
+<pre><code>## ##################################################
+## # [-----Latent variables (measurement model)-----]
+## 
+## eta1 =~ 1*t1_sc + t1_intp + t1_ext
+## eta2 =~ 1*t2_sc + t2_intp + t2_ext
+## eta3 =~ 1*t4_sc + t4_intp + t4_ext
+## 
+## ##################################################
+## # [---------Regressions (Direct effects)---------]
+## 
+## eta1 ~ 0*1
+## eta2 ~ 0*1
+## eta3 ~ 0*1
+## 
+## ##################################################
+## # [------------------Covariances-----------------]
+## 
+## eta1 ~~ eta1
+## eta2 ~~ eta2
+## eta3 ~~ eta3
+## eta1 ~~ eta2
+## eta1 ~~ eta3
+## eta2 ~~ eta3
+## t1_sc ~~ 1*t1_sc
+## t1_intp ~~ 1*t1_intp
+## t1_ext ~~ 1*t1_ext
+## t2_sc ~~ 1*t2_sc
+## t2_intp ~~ 1*t2_intp
+## t2_ext ~~ 1*t2_ext
+## t4_sc ~~ 1*t4_sc
+## t4_intp ~~ 1*t4_intp
+## t4_ext ~~ 1*t4_ext
+## 
+## ##################################################
+## # [------------------Thresholds------------------]
+## 
+## t1_sc | t1 + t2 + t3
+## t1_intp | t1 + t2 + t3
+## t1_ext | t1 + t2 + t3
+## t2_sc | t1 + t2 + t3
+## t2_intp | t1 + t2 + t3
+## t2_ext | t1 + t2 + t3
+## t4_sc | t1 + t2 + t3
+## t4_intp | t1 + t2 + t3
+## t4_ext | t1 + t2 + t3</code></pre>
 </div>
 
 

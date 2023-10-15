@@ -2,30 +2,53 @@
 #'
 #' @description Compares fit from one or several lavaan models. Also
 #' optionally includes references values. The reference fit values are
-#' based on Schreiber et al. (2006).
+#' based on Schreiber (2017), Table 3.
+#'
+#' @details Note that `nice_fit` reports the unbiased SRMR through
+#'  [lavaan::lavResiduals()] because the standard SRMR is upwardly
+#'  biased (\doi{10.1007/s11336-016-9552-7}) in a noticeable
+#'  way for smaller samples (thanks to James Uanhoro for this change).
+#'
+#'  If using `guidelines = TRUE`, please carefully consider the following 2023
+#'  quote from Terrence D. Jorgensen:
+#'
+#'  _I do not recommend including cutoffs in the table, as doing so would
+#'  perpetuate their misuse. Fit indices are not test statistics, and their
+#'  suggested cutoffs are not critical values associated with known Type I
+#'  error rates. Numerous simulation studies have shown how poorly cutoffs
+#'  perform in model selection (e.g., , Jorgensen et al. (2018). Instead of
+#'  test statistics, fit indices were designed to be measures of effect size
+#'  (practical significance), which complement the chi-squared test of
+#'  statistical significance. The range of RMSEA interpretations above is more
+#'  reminiscent of the range of small/medium/large effect sizes proposed by
+#'  Cohen for use in power analyses, which are as arbitrary as alpha levels,
+#'  but at least they better respect the idea that (mis)fit is a matter of
+#'  magnitude, not nearly so simple as "perfect or imperfect."_
 #'
 #' @param model lavaan model object(s) to extract fit indices from
 #' @param model.labels Model labels to use. If a named list is provided
 #' for `model`, default to the names of the list. Otherwise, if the list
 #' is unnamed, defaults to generic numbering.
 #' @param nice_table Logical, whether to print the table as a
-#'                   [rempsyc::nice_table] as well as print the
-#'                   reference values at the bottom of the table.
+#'                   [rempsyc::nice_table].
+#' @param guidelines Logical, if `nice_table = TRUE`, whether to display
+#'  include reference values based on Schreiber (2017), Table 3, at the
+#'  bottom of the table.
 #' @param stars Logical, if `nice_table = TRUE`, whether to display
 #'              significance stars (defaults to `FALSE`).
-#' @keywords lavaan structural equation modeling path analysis CFA
 #' @return A dataframe, representing select fit indices (chi2, df, chi2/df,
-#'         p-value of the chi2 test, CFI, TLI, RMSEA and its 90% CI, SRMR,
-#'         AIC, and BIC).
+#'         p-value of the chi2 test, CFI, TLI, RMSEA and its 90% CI,
+#'         unbiased SRMR, AIC, and BIC).
 #' @export
 #' @references Schreiber, J. B. (2017). Update to core reporting practices in
 #' structural equation modeling. *Research in social and administrative pharmacy*,
-#' *13*(3), 634-643. https://doi.org/10.1016/j.sapharm.2016.06.006
+#' *13*(3), 634-643. \doi{10.1016/j.sapharm.2016.06.006}
 #' @examplesIf requireNamespace("lavaan", quietly = TRUE)
+#' x <- paste0("x", 1:9)
 #' (latent <- list(
-#'   visual = paste0("x", 1:3),
-#'   textual = paste0("x", 4:6),
-#'   speed = paste0("x", 7:9)
+#'   visual = x[1:3],
+#'   textual = x[4:6],
+#'   speed = x[7:9]
 #' ))
 #'
 #' (regression <- list(
@@ -40,7 +63,7 @@
 #' fit <- sem(HS.model, data = HolzingerSwineford1939)
 #' nice_fit(fit)
 #'
-nice_fit <- function(model, model.labels, nice_table = FALSE, stars = FALSE) {
+nice_fit <- function(model, model.labels, nice_table = FALSE, guidelines = TRUE, stars = FALSE) {
   if (inherits(model, "list") && all(unlist(lapply(model, inherits, "lavaan")))) {
     models.list <- model
   } else if (inherits(model, "lavaan")) {
@@ -84,30 +107,33 @@ nice_fit <- function(model, model.labels, nice_table = FALSE, stars = FALSE) {
     x <- x[c(1:7, 11, 8:10)]
 
     table <- rempsyc::nice_table(x, stars = stars)
-    table <- flextable::add_footer_row(table,
-      values = c(
-        Model = "Ideal Value",
-        chi2 = "\u2014",
-        df = "\u2014",
-        chi2.df = "< 2 or 3",
-        p = "> .05",
-        CFI = "\u2265 .95",
-        TLI = "\u2265 .95",
-        `RMSEA (90% CI)` = "< .05 [.00, .08]",
-        SRMR = "\u2264 .08",
-        AIC = "Smaller",
-        BIC = "Smaller"
-      ),
-      colwidths = rep(1, length(table$col_keys))
-    )
-    table <- flextable::bold(table, part = "footer")
-    table <- flextable::align(table, align = "center", part = "all")
 
-    table <- flextable::footnote(table, i = 1, j = 1, value = flextable::as_paragraph(
-      "As proposed by Schreiber (2017)."
-    ), ref_symbols = "a", part = "footer")
-    table <- flextable::bold(table, i = 2, bold = FALSE, part = "footer")
-    table <- flextable::align(table, i = 2, part = "footer", align = "left")
+    table <- flextable::align(table, align = "center", part = "all")
+    if (isTRUE(guidelines)) {
+      table <- flextable::add_footer_row(table,
+        values = c(
+          Model = "Common guidelines",
+          chi2 = "\u2014",
+          df = "\u2014",
+          chi2.df = "< 2 or 3",
+          p = "> .05",
+          CFI = "\u2265 .95",
+          TLI = "\u2265 .95",
+          `RMSEA (90% CI)` = "< .05 [.00, .08]",
+          SRMR = "\u2264 .08",
+          AIC = "Smaller",
+          BIC = "Smaller"
+        ),
+        colwidths = rep(1, length(table$col_keys))
+      )
+      table <- flextable::bold(table, part = "footer")
+      table <- flextable::align(table, align = "center", part = "all")
+      table <- flextable::footnote(table, i = 1, j = 1, value = flextable::as_paragraph(
+        "Based on Schreiber (2017), Table 3."
+      ), ref_symbols = "a", part = "footer")
+      table <- flextable::bold(table, i = 2, bold = FALSE, part = "footer")
+      table <- flextable::align(table, i = 2, part = "footer", align = "left")
+    }
 
     table <- flextable::font(table, part = "all", fontname = "Times New Roman")
     nice.borders <- list("width" = 0.5, color = "black", style = "solid")
@@ -132,6 +158,8 @@ nice_fit_internal <- function(fit) {
     "srmr", "aic", "bic"
   )
   x <- x[keep]
+  x_srmr <- lavaan::lavResiduals(fit)$summary["usrmr", 1]
+  x[names(x) == "srmr"] <- x_srmr
   chi2.df <- x$chisq / x$df
   x <- cbind(x[1:2], chi2.df, x[3:length(x)])
   x <- round(x, 3)

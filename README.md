@@ -8,12 +8,13 @@
 [![R-CMD-check](https://github.com/rempsyc/lavaanExtra/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/rempsyc/lavaanExtra/actions/workflows/R-CMD-check.yaml)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/lavaanExtra)](https://cran.r-project.org/package=lavaanExtra)
-[![r-universe](https://rempsyc.r-universe.dev/badges/lavaanExtra)](https://rempsyc.r-universe.dev/ui/#package:lavaanExtra)
+[![r-universe](https://rempsyc.r-universe.dev/badges/lavaanExtra)](https://rempsyc.r-universe.dev/lavaanExtra)
 [![Last-commit](https://img.shields.io/github/last-commit/rempsyc/lavaanExtra)](https://github.com/rempsyc/lavaanExtra/commits/main)
 [![Codecov test
 coverage](https://codecov.io/gh/rempsyc/lavaanExtra/branch/main/graph/badge.svg)](https://app.codecov.io/gh/rempsyc/lavaanExtra?branch=main)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![downloads](https://cranlogs.r-pkg.org/badges/lavaanExtra)](https://cran.r-project.org/package=lavaanExtra)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.05701/status.svg)](https://doi.org/10.21105/joss.05701)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/lavaanExtra)](https://cranlogs.r-pkg.org/)
 [![sponsors](https://img.shields.io/github/sponsors/rempsyc)](https://github.com/sponsors/rempsyc)
 [![followers](https://img.shields.io/github/followers/rempsyc?style=social)](https://github.com/rempsyc?tab=followers)
@@ -45,16 +46,14 @@ install.packages("lavaanExtra", repos = c(
 Or from GitHub, for the very latest version:
 
 ``` r
-# If package `remotes` isn't already installed, install it with `install.packages("remotes")`
+# If not already installed, install package `remotes` with `install.packages("remotes")`
 remotes::install_github("rempsyc/lavaanExtra")
 ```
 
-You can load the package and open the help file, and click “Index” at
-the bottom. You will see all the available functions listed.
+To see all the available functions, use:
 
 ``` r
-library(lavaanExtra)
-?lavaanExtra
+help(package = "lavaanExtra")
 ```
 
 **Dependencies:** Because `lavaanExtra` is a package of convenience
@@ -116,14 +115,19 @@ library(lavaan)
 library(lavaanExtra)
 
 # Define latent variables
-latent <- list(visual = c("x1", "x2", "x3"),
-               textual = c("x4", "x5", "x6"),
-               speed = c("x7", "x8", "x9"))
+latent <- list(
+  visual = c("x1", "x2", "x3"),
+  textual = c("x4", "x5", "x6"),
+  speed = c("x7", "x8", "x9")
+)
 
-# If you have many items, you can also use:
-latent <- list(visual = paste0("x", 1:3),
-               textual = paste0("x", 4:6),
-               speed = paste0("x", 7:9))
+# If you have many items, you can also use the `paste0` function:
+x <- paste0("x", 1:9)
+latent <- list(
+  visual = x[1:3],
+  textual = x[4:6],
+  speed = x[7:9]
+)
 
 # Write the model, and check it
 cfa.model <- write_lavaan(latent = latent)
@@ -138,7 +142,7 @@ cat(cfa.model)
 # Fit the model fit and plot with `lavaanExtra::cfa_fit_plot`
 # to get the factor loadings visually (optionally as PDF)
 fit.cfa <- cfa_fit_plot(cfa.model, HolzingerSwineford1939)
-#> lavaan 0.6.15 ended normally after 35 iterations
+#> lavaan 0.6.16 ended normally after 35 iterations
 #> 
 #>   Estimator                                         ML
 #>   Optimization method                           NLMINB
@@ -286,8 +290,14 @@ covariance <- list(speed = "textual", ageyr = "grade")
 indirect <- list(IV = IV, M = M, DV = DV)
 
 # Write the model, and check it
-model <- write_lavaan(mediation, regression, covariance, 
-                      indirect, latent, label = TRUE)
+model <- write_lavaan(
+  mediation = mediation,
+  regression = regression,
+  covariance = covariance,
+  indirect = indirect,
+  latent = latent,
+  label = TRUE
+)
 cat(model)
 #> ##################################################
 #> # [-----Latent variables (measurement model)-----]
@@ -327,18 +337,19 @@ fit.sem <- sem(model, data = HolzingerSwineford1939)
 ```
 
 ``` r
-# Get regression parameters only and make it pretty with the `rempsyc::nice_table` integration
+# Get regression parameters and make pretty with `rempsyc::nice_table`
 lavaan_reg(fit.sem, nice_table = TRUE, highlight = TRUE)
 ```
 
-<img src="man/figures/README-saturated-1.png" width="60%" />
+<img src="man/figures/README-saturated-1.png" width="100%" />
 
 ``` r
-# Get correlations and make them pretty with the `rempsyc::nice_table` integration
+# Get covariances/correlations and make them pretty with 
+# the `rempsyc::nice_table` integration
 lavaan_cor(fit.sem, nice_table = TRUE)
 ```
 
-<img src="man/figures/README-covariance-1.png" width="40%" />
+<img src="man/figures/README-covariance-1.png" width="100%" />
 
 ``` r
 # Get nice fit indices with the `rempsyc::nice_table` integration
@@ -351,12 +362,17 @@ fit_table
 ``` r
 # Save fit table to Word!
 flextable::save_as_docx(fit_table, path = "fit_table.docx")
+# Note that it will also render to PDF in an `rmarkdown` document
+# with `output: pdf_document`, but using `latex_engine: xelatex`
+# is necessary when including Unicode symbols in tables like with
+# the `nice_fit()` function.
 
-# Let's get the indirect effects only and make it pretty with the `rempsyc::nice_table` integration
-lavaan_ind(fit.sem, nice_table = TRUE)
+# Let's get the user-defined (e.g., indirect) effects only and make it pretty
+# with the `rempsyc::nice_table` integration
+lavaan_defined(fit.sem, nice_table = TRUE)
 ```
 
-<img src="man/figures/README-indirect2-1.png" width="90%" />
+<img src="man/figures/README-indirect2-1.png" width="100%" />
 
 ``` r
 # Plot our model
@@ -371,7 +387,8 @@ mylayout <- data.frame(
   IV = c("", "x1", "grade", "", "ageyr", "", ""),
   M = c("", "x2", "", "visual", "", "", ""),
   DV = c("", "x3", "textual", "", "speed", "", ""),
-  DV.items = c(paste0("x", 4:6), "", paste0("x", 7:9))) |> 
+  DV.items = c(paste0("x", 4:6), "", paste0("x", 7:9))
+) |>
   as.matrix()
 mylayout
 #>      IV      M        DV        DV.items

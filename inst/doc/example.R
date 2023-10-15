@@ -1,4 +1,4 @@
-## ---- message = FALSE---------------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(lavaan)
 library(lavaanExtra)
 
@@ -42,7 +42,9 @@ cov <- list(
 )
 int <- c("y1", "f1")
 myModel <- write_lavaan(
-  regression = reg, latent = lat, covariance = cov,
+  regression = reg,
+  latent = lat,
+  covariance = cov,
   intercept = int
 )
 cat(myModel)
@@ -95,7 +97,11 @@ cov <- list(
   y4 = "y8",
   y6 = "y8"
 )
-model <- write_lavaan(latent = lat, regression = reg, covariance = cov)
+model <- write_lavaan(
+  latent = lat,
+  regression = reg,
+  covariance = cov
+)
 cat(model)
 
 ## -----------------------------------------------------------------------------
@@ -224,7 +230,7 @@ indirect <- list(
   ab = "a*b",
   total = "c + (a*b)"
 )
-model <- write_lavaan(mediation, indirect = indirect)
+model <- write_lavaan(mediation = mediation, indirect = indirect)
 cat(model)
 
 ## -----------------------------------------------------------------------------
@@ -323,4 +329,147 @@ model <- write_lavaan(
   indirect = ind, latent = lat
 )
 cat(model)
+
+## -----------------------------------------------------------------------------
+HS.model <- "
+# three-factor model
+  visual  =~ x1 + x2 + x3
+  textual =~ x4 + x5 + x6
+  speed   =~ x7 + x8 + x9
+# intercepts with fixed values
+  x1 + x2 + x3 + x4 ~ 0.5*1
+"
+
+## -----------------------------------------------------------------------------
+lat <- list(
+  visual = paste0("x", 1:3),
+  textual = paste0("x", 4:6),
+  speed = paste0("x", 7:9)
+)
+
+cus <- "x1 + x2 + x3 + x4 ~ 0.5*1"
+
+HS.model <- write_lavaan(
+  latent = lat, custom = cus
+)
+cat(HS.model)
+
+## -----------------------------------------------------------------------------
+mod2 <- "
+## LIR means
+  y2w1 ~ mean1*1
+  y2w2 ~ mean2*1
+## LIR (co)variances
+  y2w1 ~~ var1*y2w1 + y2w2
+  y2w2 ~~ var2*y2w2
+## thresholds link LIRs to observed items
+  y2w1 | thr1*t1
+  y2w2 | thr2*t1
+"
+
+## -----------------------------------------------------------------------------
+reg <- list(
+  y2w1 = "mean1*1",
+  y2w2 = "mean2*1"
+)
+
+cov <- list(
+  y2w1 = c("var1*y2w1", "y2w2"),
+  y2w2 = "var2*y2w2"
+)
+
+thres <- list(
+  y2w1 = "thr1*t1",
+  y2w2 = "thr2*t1"
+)
+
+HS.model <- write_lavaan(
+  regression = reg,
+  covariance = cov,
+  threshold = thres
+)
+cat(HS.model)
+
+## -----------------------------------------------------------------------------
+configural_invar <- " #opening quote
+#factor loadings
+  eta1 =~ 1*t1_sc + #for identification
+          t1_intp +
+          t1_ext
+  eta2 =~ 1*t2_sc + #for identification
+          t2_intp +
+          t2_ext
+  eta3 =~ 1*t4_sc + #for identification
+          t4_intp +
+          t4_ext
+
+#latent variable variances
+   eta1~~eta1
+   eta2~~eta2
+   eta3~~eta3
+
+#latent variable covariances
+   eta1~~eta2
+   eta1~~eta3
+   eta2~~eta3
+
+#latent variable means
+   eta1~0*1 #for scaling
+   eta2~0*1 #for scaling
+   eta3~0*1 #for scaling
+
+#propensity variances
+   t1_sc  ~~ 1*t1_sc
+   t1_intp~~ 1*t1_intp
+   t1_ext ~~ 1*t1_ext
+   t2_sc  ~~ 1*t2_sc
+   t2_intp~~ 1*t2_intp
+   t2_ext ~~ 1*t2_ext
+   t4_sc  ~~ 1*t4_sc
+   t4_intp~~ 1*t4_intp
+   t4_ext ~~ 1*t4_ext
+
+#unique covariances
+
+
+#observed variable intercepts/thresholds (4 categories = 3 thresholds)
+   t1_sc   |t1 + t2 + t3
+   t1_intp |t1 + t2 + t3
+   t1_ext  |t1 + t2 + t3
+   t2_sc   |t1 + t2 + t3
+   t2_intp |t1 + t2 + t3
+   t2_ext  |t1 + t2 + t3
+   t4_sc   |t1 + t2 + t3
+   t4_intp |t1 + t2 + t3
+   t4_ext  |t1 + t2 + t3
+" # closing quote
+
+## -----------------------------------------------------------------------------
+eta <- paste0("eta", 1:3)
+t <- paste0("t", 1:4)
+term <- c("sc", "intp", "ext")
+tnames <- paste0(rep(t[c(1:2, 4)], each = 3), "_", term)
+tnames2 <- paste0("1*", tnames)
+
+lat <- list(
+  eta1 = c(tnames2[1], tnames[2:3]),
+  eta2 = c(tnames2[4], tnames[5:6]),
+  eta3 = c(tnames2[7], tnames[8:9])
+)
+
+cov <- as.list(c(eta, eta[2:3], eta[3], tnames2))
+names(cov) <- c(eta, eta[1], eta[1:2], tnames)
+
+thres <- rep(list(t[1:3]), 9)
+names(thres) <- tnames
+
+reg <- as.list(setNames(rep("0*1", 3), eta))
+
+HS.model <- write_lavaan(
+  regression = reg,
+  latent = lat,
+  covariance = cov,
+  threshold = thres
+)
+cat(HS.model)
 

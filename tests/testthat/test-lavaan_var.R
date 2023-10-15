@@ -1,9 +1,10 @@
 suppressWarnings(library(lavaan))
 
+x <- paste0("x", 1:9)
 latent <- list(
-  visual = paste0("x", 1:3),
-  textual = paste0("x", 4:6),
-  speed = paste0("x", 7:9)
+  visual = x[1:3],
+  textual = x[4:6],
+  speed = x[7:9]
 )
 
 regression <- list(
@@ -22,7 +23,7 @@ fit <- sem(HS.model, data = HolzingerSwineford1939)
 
 test_that("nice_fit regular", {
   expect_s3_class(
-    lavaan_reg(fit),
+    lavaan_var(fit),
     c("lavaan.data.frame", "data.frame")
   )
 })
@@ -30,7 +31,7 @@ test_that("nice_fit regular", {
 test_that("nice_fit as nice_table", {
   skip_if_not_installed("rempsyc")
   expect_s3_class(
-    lavaan_reg(fit, nice_table = TRUE),
+    lavaan_var(fit, nice_table = TRUE),
     c("nice_table", "flextable")
   )
 })

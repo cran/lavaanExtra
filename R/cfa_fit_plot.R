@@ -21,16 +21,16 @@
 #'                  wants something different than the default file name.
 #'                  It saves to pdf per default, so the .pdf extension
 #'                  should not be specified as it will add it automatically.
-#' @keywords CFA lavaan plot fit
 #' @return The function returns a `lavaan` fit object. However, it also: prints
 #'         a summary of the `lavaan` fit object to the console, and; prints a
 #'         `lavaanPlot` of the `lavaan` fit object.
 #' @export
 #' @examplesIf requireNamespace("lavaan", quietly = TRUE) && requireNamespace("lavaanPlot", quietly = TRUE)
+#' x <- paste0("x", 1:9)
 #' (latent <- list(
-#'   visual = paste0("x", 1:3),
-#'   textual = paste0("x", 4:6),
-#'   speed = paste0("x", 7:9)
+#'   visual = x[1:3],
+#'   textual = x[4:6],
+#'   speed = x[7:9]
 #' ))
 #'
 #' HS.model <- write_lavaan(latent = latent)

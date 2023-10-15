@@ -17,6 +17,7 @@
 #'                 `mediation` argument must be specified too.
 #' @param latent Latent variable indicators (`=~` symbol: "is measured by").
 #' @param intercept Intercept indicators (`~ 1` symbol: "intercept").
+#' @param threshold Threshold indicators (`|` symbol: "threshold").
 #' @param constraint.equal Equality indicators (`==` symbol).
 #' @param constraint.smaller Smaller than indicators (`<` symbol).
 #' @param constraint.larger Greater than indicators (`>` symbol).
@@ -27,14 +28,15 @@
 #'              mediation argument.
 #' @param use.letters Logical, for the labels, whether to use letters
 #'                    instead of the variable names.
-#' @keywords lavaan structural equation modeling path analysis CFA
 #' @return A character string, representing the specified `lavaan` model.
+#' @seealso The corresponding vignette: <https://lavaanextra.remi-theriault.com/articles/write_lavaan.html>
 #' @export
 #' @examplesIf requireNamespace("lavaan", quietly = TRUE)
+#' x <- paste0("x", 1:9)
 #' (latent <- list(
-#'   visual = paste0("x", 1:3),
-#'   textual = paste0("x", 4:6),
-#'   speed = paste0("x", 7:9)
+#'   visual = x[1:3],
+#'   textual = x[4:6],
+#'   speed = x[7:9]
 #' ))
 #'
 #' HS.model <- write_lavaan(latent = latent)
@@ -47,21 +49,33 @@
 #'   auto.cov.lv.x = TRUE
 #' )
 #' summary(fit, fit.measures = TRUE)
-write_lavaan <- function(mediation = NULL, regression = NULL, covariance = NULL,
-                         indirect = NULL, latent = NULL, intercept = NULL,
-                         constraint.equal = NULL, constraint.smaller = NULL,
-                         constraint.larger = NULL, custom = NULL, label = FALSE,
+write_lavaan <- function(mediation = NULL,
+                         regression = NULL,
+                         covariance = NULL,
+                         indirect = NULL,
+                         latent = NULL,
+                         intercept = NULL,
+                         threshold = NULL,
+                         constraint.equal = NULL,
+                         constraint.smaller = NULL,
+                         constraint.larger = NULL,
+                         custom = NULL,
+                         label = FALSE,
                          use.letters = FALSE) {
   constraint <- NULL
   hashtag <- sprintf("%s\n", paste0(rep("#", 50), collapse = ""))
-  process_vars <- function(x, symbol, label = FALSE, collapse = " + ", header = paste0(
-                             hashtag, paste0("# ", title, "\n\n")
-                           ), title = NULL, spacer = "\n\n") {
+  process_vars <- function(x,
+                           symbol,
+                           label = FALSE,
+                           collapse = " + ",
+                           header = paste0(hashtag, paste0("# ", title, "\n\n")),
+                           title = NULL,
+                           spacer = "\n\n") {
     if (isTRUE(label)) {
       labels <- paste0(names(x))
       if (isTRUE(use.letters)) {
         x <- lapply(seq(x), function(i) {
-          paste0(letters[seq(length(x[[i]]))], "_", labels[i], "*", x[[i]])
+          paste0(letters[seq_along(x[[i]])], "_", labels[i], "*", x[[i]])
         })
       } else {
         x <- lapply(seq(x), function(i) {
@@ -88,7 +102,7 @@ write_lavaan <- function(mediation = NULL, regression = NULL, covariance = NULL,
       labels <- names(x)
       if (isTRUE(use.letters)) {
         x <- lapply(seq(x), function(i) {
-          paste0(letters[seq(length(x[[i]]))], "_", labels[i])
+          paste0(letters[seq_along(x[[i]])], "_", labels[i])
         })
       } else {
         x <- lapply(seq(x), function(i) {
@@ -148,6 +162,13 @@ write_lavaan <- function(mediation = NULL, regression = NULL, covariance = NULL,
       "\n\n"
     )
   }
+  if (!is.null(threshold)) {
+    threshold <- process_vars(
+      threshold,
+      symbol = "|", title =
+        "[------------------Thresholds------------------]"
+    )
+  }
   if (!is.null(constraint.equal) || !is.null(constraint.smaller) ||
     !is.null(constraint.larger)) {
     title <- "[-----------------Constraints------------------]"
@@ -181,7 +202,7 @@ write_lavaan <- function(mediation = NULL, regression = NULL, covariance = NULL,
     custom <- paste0(header, custom)
   }
   paste0(latent, mediation, regression, covariance, indirect, intercept,
-    constraint, custom,
+    threshold, constraint, custom,
     collapse = ""
   )
 }
