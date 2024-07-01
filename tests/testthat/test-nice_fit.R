@@ -30,8 +30,7 @@ test_that("nice_fit regular", {
 test_that("nice_fit as nice_table", {
    skip_if_not_installed("rempsyc")
   expect_s3_class(
-    nice_fit(fit, nice_table = TRUE),
-    c("nice_table", "flextable")
+    nice_fit(fit, nice_table = TRUE), "flextable"
   )
 })
 
@@ -72,3 +71,26 @@ test_that("nice_fit error on wronb object class", {
     nice_fit(HS.model, model.labels = seq(1, 10))
   )
 })
+
+dat <- data.frame(z = sample(c(0, 1), 100, replace = TRUE),
+                  x = sample(1:7, 100, replace = TRUE),
+                  y = sample(1:5, 100, replace = TRUE))
+mod <- '
+  y ~ a*x
+  z ~ b*y + c*x
+  ind := a*b
+  '
+fit <- sem(mod, dat, ordered = "z")
+
+test_that("nice_fit test categorical variable", {
+  expect_s3_class(nice_fit(fit, verbose = FALSE), "data.frame")
+})
+
+test_that("nice_fit test categorical variable", {
+  skip_if_not_installed("rempsyc")
+  expect_s3_class(
+    nice_fit(fit, nice_table = TRUE, verbose = FALSE), "flextable"
+  )
+})
+
+

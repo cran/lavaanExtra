@@ -18,7 +18,7 @@
 #' @return A lavaanPlot, of classes `c("grViz", "htmlwidget")`, representing the
 #'         specified `lavaan` model.
 #' @export
-#' @examplesIf requireNamespace("lavaan", quietly = TRUE) && requireNamespace("lavaanPlot", quietly = TRUE)
+#' @examplesIf requireNamespace("lavaan", quietly = TRUE) && requireNamespace("lavaanPlot", quietly = TRUE) && requireNamespace("DiagrammeRsvg", quietly = TRUE)
 #' x <- paste0("x", 1:9)
 #' (latent <- list(
 #'   visual = x[1:3],
@@ -43,7 +43,8 @@ nice_lavaanPlot <- function(
     graph_options = c(rankdir = "LR"), ...) {
   insight::check_if_installed(
     c(
-      "lavaanPlot", "DiagrammeRsvg", "rsvg", "png", "webshot"
+      "lavaanPlot", "DiagrammeRsvg",
+       "rsvg", "png", "webshot"
     ),
     reason = "for this function."
   )

@@ -1,3 +1,21 @@
+# lavaanExtra 0.2.2
+* Incoming ✨
+
+# lavaanExtra 0.2.1.1
+* Incoming ✨
+
+# lavaanExtra 0.2.1
+* New CRAN submission
+
+## lavaanExtra 0.2.0.3
+* Fix bug in `nice_fit()` that created an error with categorical variables (#37)
+
+## lavaanExtra 0.2.0.2
+* Fix bug in `lavaan_defined()` / `lavaan_extract()` that repeated the first cell on all other rows of the first column (#36)
+
+## lavaanExtra 0.2.0.1
+* Now skips tests and examples when `DiagrammeRsvg` is not installed
+
 # lavaanExtra 0.2.0
 * CRAN resubmission to fix unicode problem
 
